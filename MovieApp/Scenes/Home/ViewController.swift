@@ -8,12 +8,16 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        NetworkLayer.shared.getMovieList().subscribe(onNext: { movieGroup in
+            print(movieGroup)
+        }, onError: { error in
+            print(error)
+        })
     }
-
-
+    
+    
 }
 
