@@ -7,28 +7,33 @@
 
 import UIKit
 
+/// Класс  `MainTabBarController` – кастомный `UITabBarController` для проекта.
 final class MainTabBarController: UITabBarController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        generateTabBar()
-        setTabBarAppearance()
-        tabBar.backgroundImage = UIImage()
-        tabBar.backgroundColor = .clear
-        tabBar.shadowImage = UIImage()
+    
+    /// Метод, который создает объект класса `UIViewController` с соответсвующими настройками для `tabBarItem`.
+    private func generateVC(
+        viewController: UIViewController,
+        title: String,
+        image: UIImage?
+    ) -> UIViewController {
+        viewController.tabBarItem.title = title
+        viewController.tabBarItem.image = image
+        return viewController
     }
     
+    /// Метод, который настраивает `viewControllers` для `UITabBarController'а`
+    ///  и задает, что по умолчанию выбранный элемент будет первым (экран Главная).
     private func generateTabBar() {
         viewControllers = [
             generateVC(
                 viewController: HomeViewController(),
-                title: "Home",
+                title: "Main",
                 image: UIImage(systemName: "house.fill")
             ),
             generateVC(
                 viewController: FavoriteMoviesViewController(),
-                title: "Favorite",
-                image: UIImage(systemName: "person.fill")
+                title: "Favorites",
+                image: UIImage(systemName: "heart.fill")
             ),
             generateVC(
                 viewController: SettingsViewController(),
@@ -36,15 +41,18 @@ final class MainTabBarController: UITabBarController {
                 image: UIImage(systemName: "slider.horizontal.3")
             )
         ]
-    }
-    
-    private func generateVC(viewController: UIViewController, title: String, image: UIImage?) -> UIViewController {
-        viewController.tabBarItem.title = title
-        viewController.tabBarItem.image = image
         
-        return viewController
+        selectedIndex = 0
     }
     
+    /// Метод, необходимый для того, чтоб `UITabBar` был прозрачным.
+    private func setTabBarTransparent() {
+        tabBar.backgroundImage = UIImage()
+        tabBar.backgroundColor = .clear
+        tabBar.shadowImage = UIImage()
+    }
+    
+    /// Метод настройки дизайна `UITabBar'а`.
     private func setTabBarAppearance() {
         tabBar.barStyle = .default
         
@@ -76,6 +84,14 @@ final class MainTabBarController: UITabBarController {
         
         tabBar.tintColor = .tabBarItemAccent
         tabBar.unselectedItemTintColor = .tabBarItemLight
+    }
+    
+    // MARK: - viewDidLoad()
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        generateTabBar()
+        setTabBarAppearance()
+        setTabBarTransparent()
     }
     
 }
