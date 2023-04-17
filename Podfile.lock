@@ -1,5 +1,6 @@
 PODS:
   - Alamofire (5.6.4)
+  - Cosmos (23.0.0)
   - Differentiator (4.0.1)
   - Kingfisher (7.6.2)
   - PaddingLabel (1.2)
@@ -17,6 +18,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
+  - Cosmos
   - Kingfisher
   - PaddingLabel (= 1.2)
   - RxCocoa
@@ -27,6 +29,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Alamofire
+    - Cosmos
     - Differentiator
     - Kingfisher
     - PaddingLabel
@@ -38,6 +41,7 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Alamofire: 4e95d97098eacb88856099c4fc79b526a299e48c
+  Cosmos: b5c6a9a637e28a061b54c8f8b1d8529d7d4db73f
   Differentiator: 886080237d9f87f322641dedbc5be257061b0602
   Kingfisher: 6c5449c6450c5239166510ba04afe374a98afc4f
   PaddingLabel: 21ab5282c780366018b04c30e3920c2f55a2fd14
@@ -47,6 +51,6 @@ SPEC CHECKSUMS:
   RxSwift: 915abbdfb62214aa89ccd0b194d44fb478019b27
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
 
-PODFILE CHECKSUM: 03a79de30dbfbd116e07ce33ce6b7d8c865e850f
+PODFILE CHECKSUM: 2419c030f891c7cf9c155834793c5fd3c4dff4fd
 
 COCOAPODS: 1.12.0

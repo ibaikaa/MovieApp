@@ -14,74 +14,87 @@ final class MainTabBarController: UITabBarController {
     private func generateVC(
         viewController: UIViewController,
         title: String,
-        image: UIImage?
+        image: UIImage?,
+        selectedImage: UIImage?
     ) -> UIViewController {
-        viewController.tabBarItem.title = title
-        viewController.tabBarItem.image = image
-        return viewController
+        /// Создание `UITabBarItem`
+        let tabBarItem = UITabBarItem(
+            title: title,
+            image: image,
+            selectedImage: selectedImage
+        )
+      
+        let vc = setupNavigationController(
+            for: viewController,
+            title: title,
+            tabBarItem: tabBarItem
+        )
+        
+        return vc
     }
     
+    
+    /// Метод для создания `UINavigatonController'а` для `VC` с определенными настройками UI.
+    private func setupNavigationController(
+        for viewController: UIViewController,
+        title: String,
+        tabBarItem: UITabBarItem
+    ) -> UINavigationController {
+        viewController.view.backgroundColor = .viewBackgroundColor
+        viewController.title = title
+        
+        let navigationController = UINavigationController(
+            rootViewController: viewController
+        )
+        
+        navigationController.tabBarItem = tabBarItem
+        navigationController.navigationBar.barStyle = .black
+        navigationController.navigationBar.tintColor = .white
+        navigationController.navigationBar.titleTextAttributes = [
+            .foregroundColor: UIColor.white
+        ]
+        
+        navigationController.navigationBar.prefersLargeTitles = true
+        
+        return navigationController
+    }
+
     /// Метод, который настраивает `viewControllers` для `UITabBarController'а`
-    ///  и задает, что по умолчанию выбранный элемент будет первым (экран Главная).
+    /// и задает, что по умолчанию выбранный элемент будет первым (экран Главная).
     private func generateTabBar() {
         viewControllers = [
             generateVC(
                 viewController: HomeViewController(),
                 title: "Main",
-                image: UIImage(systemName: "house.fill")
+                image: UIImage(systemName: "house"),
+                selectedImage: UIImage(systemName: "house.fill")
             ),
             generateVC(
                 viewController: FavoriteMoviesViewController(),
                 title: "Favorites",
-                image: UIImage(systemName: "heart.fill")
+                image: UIImage(systemName: "heart"),
+                selectedImage: UIImage(systemName: "heart.fill")
             ),
             generateVC(
                 viewController: SettingsViewController(),
                 title: "Settings",
-                image: UIImage(systemName: "slider.horizontal.3")
+                image: UIImage(systemName: "slider.horizontal.3"),
+                selectedImage: UIImage(systemName: "slider.horizontal.3")
             )
         ]
         
         selectedIndex = 0
     }
     
-    /// Метод, необходимый для того, чтоб `UITabBar` был прозрачным.
-    private func setTabBarTransparent() {
+    private func setTabBarTrans() {
         tabBar.backgroundImage = UIImage()
-        tabBar.backgroundColor = .clear
         tabBar.shadowImage = UIImage()
+//        tabBar.isTranslucent = false
     }
     
     /// Метод настройки дизайна `UITabBar'а`.
     private func setTabBarAppearance() {
-        tabBar.barStyle = .default
-        
-        let positionOnX: CGFloat = 10
-        let positionOnY: CGFloat = 14
-        let width = tabBar.bounds.width - positionOnX * 2
-        let height = tabBar.bounds.height + positionOnY * 2
-        
-        let roundLayer = CAShapeLayer()
-        
-        let bezierPath = UIBezierPath(
-            roundedRect: CGRect(
-                x: positionOnX,
-                y: tabBar.bounds.minY - positionOnY,
-                width: width,
-                height: height
-            ),
-            cornerRadius: height / 2
-        )
-        
-        roundLayer.path = bezierPath.cgPath
-        
-        tabBar.layer.insertSublayer(roundLayer, at: 0)
-        
-        tabBar.itemWidth = width / 5
-        tabBar.itemPositioning = .centered
-        
-        roundLayer.fillColor = UIColor.mainWhite.cgColor
-        
+        tabBar.backgroundColor = .tabBarBackgroundColor
         tabBar.tintColor = .tabBarItemAccent
         tabBar.unselectedItemTintColor = .tabBarItemLight
     }
@@ -91,7 +104,7 @@ final class MainTabBarController: UITabBarController {
         super.viewDidLoad()
         generateTabBar()
         setTabBarAppearance()
-        setTabBarTransparent()
+        setTabBarTrans()
     }
     
 }

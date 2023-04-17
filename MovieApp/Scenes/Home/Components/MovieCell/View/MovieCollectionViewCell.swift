@@ -1,5 +1,5 @@
 //
-//  MovieTableViewCell.swift
+//  MovieCollectionViewCell.swift
 //  MovieApp
 //
 //  Created by ibaikaa on 17/4/23.
@@ -9,13 +9,15 @@ import UIKit
 import SnapKit
 import PaddingLabel
 import Kingfisher
+import Cosmos
 
-final class MovieTableViewCell: UITableViewCell {
-    static let identifier = String(describing: MovieTableViewCell.self)
+
+final class MovieCollectionViewCell: UICollectionViewCell {
+    static let identifier = String(describing: MovieCollectionViewCell.self)
     
     private lazy var posterImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleToFill
+        imageView.contentMode = .scaleAspectFill
         imageView.backgroundColor = .clear
         imageView.layer.cornerRadius = 10
         return imageView
@@ -24,15 +26,38 @@ final class MovieTableViewCell: UITableViewCell {
     private lazy var movieNameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "AvenirNext-Bold", size: 16)
-        label.textColor = .black
+        label.textColor = .white
+        label.numberOfLines = 0
         return label
+    }()
+    
+    private lazy var ratingStarsView: CosmosView = {
+        var settings = CosmosSettings()
+        
+        // Шрифт
+        settings.textFont = UIFont(name: "AvenirNext-Regular", size: 14)!
+        // Закрашивание звездочек
+        settings.fillMode = .precise
+        
+        // Настройка цветов для звездочек
+        settings.filledColor = .ratingColor
+        settings.emptyBorderColor = .ratingColor
+        settings.filledBorderColor = .ratingColor
+        
+        // Создание CosmosView
+        let cosmosView = CosmosView(settings: settings)
+        
+        // Отключение интерактива с пользователями
+        cosmosView.isUserInteractionEnabled = false
+        
+        return cosmosView
     }()
     
     private lazy var crewLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "AvenirNext-Regular", size: 12)
         label.numberOfLines = 0
-        label.textColor = .black
+        label.textColor = .white
         return label
     }()
     
@@ -45,20 +70,11 @@ final class MovieTableViewCell: UITableViewCell {
         return label
     }()
     
-    private lazy var ratingLabel: UILabel = {
-        let label = PaddingLabel()
-        label.textColor = .black
-        label.backgroundColor = .systemGray5
-        label.font = UIFont(name: "AvenirNext-Regular", size: 10)
-        label.layer.cornerRadius = 6
-        return label
-    }()
-    
     private func setupSubviews() {
         addSubview(posterImageView)
         posterImageView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(10)
-            make.left.equalToSuperview().offset(10)
+            make.left.equalToSuperview().offset(0)
             make.bottom.equalToSuperview().offset(-10)
             make.width.equalToSuperview().dividedBy(3)
         }
@@ -83,8 +99,8 @@ final class MovieTableViewCell: UITableViewCell {
             make.left.equalTo(posterImageView.snp.right).offset(10)
         }
         
-        addSubview(ratingLabel)
-        ratingLabel.snp.makeConstraints { make in
+        addSubview(ratingStarsView)
+        ratingStarsView.snp.makeConstraints { make in
             make.top.equalTo(crewLabel.snp.bottom).offset(10)
             make.left.equalTo(yearReleasedLabel.snp.right).offset(15)
         }
@@ -95,12 +111,29 @@ final class MovieTableViewCell: UITableViewCell {
         movieNameLabel.text = model.title
         crewLabel.text = model.crew
         yearReleasedLabel.text = model.year
-        ratingLabel.text = model.rating
+        
+        guard
+            let rating = model.rating,
+            let ratingDouble = Double(rating),
+            let ratingCount = model.ratingCount,
+            let ratingCountInt = Int(ratingCount)
+        else {
+            ratingStarsView.rating = 5
+            ratingStarsView.text = "No Data"
+            return
+        }
+        
+        
+        
+        ratingStarsView.rating = ratingDouble / 2
+        ratingStarsView.text = ratingCountInt.withCommas()
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         setupSubviews()
+        backgroundColor = .movieCellBackgroundColor
+        layer.cornerRadius = 16
     }
     
 }

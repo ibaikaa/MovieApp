@@ -18,6 +18,7 @@ target 'MovieApp' do
   # Для верстки
   pod 'SnapKit'
   pod 'PaddingLabel', '1.2'
+  pod 'Cosmos'
 
   # Для удобного интерфейса для получения и отображения картинки по URL.
   pod 'Kingfisher' 
