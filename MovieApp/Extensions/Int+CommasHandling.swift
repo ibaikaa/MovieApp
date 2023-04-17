@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Расширение для типа `Int` с методом `withCommas(),` позволяющим удобно прочитать число. Использовал встроенный `NumberFormatter()`.
 extension Int {
     func withCommas() -> String {
         let numberFormatter = NumberFormatter()

@@ -24,6 +24,7 @@ class HomeViewController: UIViewController {
     
     private lazy var moviesCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 30
         let collectionView = UICollectionView(
             frame: .zero,
             collectionViewLayout: layout
@@ -64,17 +65,30 @@ class HomeViewController: UIViewController {
     private func updateUI() {
         view.addSubview(moviesCollectionView)
         moviesCollectionView.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
             make.left.equalToSuperview().offset(16)
             make.right.equalToSuperview().offset(-16)
+            make.bottom.equalToSuperview()
         }
+    }
+    
+    private let searchController = UISearchController(searchResultsController: nil)
+    
+    private func configureSearchController() {
+        searchController.searchBar.barStyle = .black
+        navigationItem.searchController = searchController
+        navigationItem.searchController?.hidesNavigationBarDuringPresentation = false
+        navigationItem.hidesSearchBarWhenScrolling = false
+        
+        searchController.searchBar.searchTextField.placeholder = "Search movie by name"
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel.fetchMovies()
-        updateUI()
+        configureSearchController()
         configureMoviesCollectionView()
+        updateUI()
     }
     
 }
@@ -87,7 +101,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
     ) -> CGSize {
         CGSize(
             width: collectionView.bounds.width,
-            height: view.bounds.height / 5
+            height: view.bounds.height / 4.2
         )
     }
 }

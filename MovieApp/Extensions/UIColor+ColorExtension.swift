@@ -12,7 +12,7 @@ extension UIColor {
         #colorLiteral(red: 0.07843137255, green: 0.1019607843, blue: 0.1921568627, alpha: 1)
     }
     
-    static var movieCellBackgroundColor: UIColor {
+    static var movieViewBackgroundColor: UIColor {
         #colorLiteral(red: 0.1176470588, green: 0.1529411765, blue: 0.2745098039, alpha: 1)
     }
     
@@ -31,4 +31,5 @@ extension UIColor {
     static var ratingColor: UIColor {
         #colorLiteral(red: 0.9647058824, green: 0.8392156863, blue: 0.05882352941, alpha: 1)
     }
+    
 }
