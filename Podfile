@@ -15,6 +15,7 @@ target 'MovieApp' do
   pod 'Kingfisher', '~> 7.0'
 
   pod 'SnapKit'
+  pod 'PaddingLabel', '1.2'
 
 
   # Fixing bug
