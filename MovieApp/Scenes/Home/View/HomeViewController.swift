@@ -21,15 +21,19 @@ class HomeViewController: UIViewController {
     }()
     
     private func configureMoviesTableView() {
-        moviesTableView.register(UITableViewCell.self, forCellReuseIdentifier: "MovieCell")
+        moviesTableView.register(MovieTableViewCell.self, forCellReuseIdentifier: MovieTableViewCell.identifier)
         
         viewModel.moviesObservable
-            .bind(to: moviesTableView.rx.items(cellIdentifier: "MovieCell")) { index, movie, cell in
+            .bind(to: moviesTableView.rx.items(cellIdentifier: MovieTableViewCell.identifier)) { index, movie, cell in
                 
+                guard let cell = cell as? MovieTableViewCell else { fatalError() }
+                cell.setup(with: movie)
                 cell.selectionStyle = .none
-                cell.textLabel?.text = movie.title
                 
             }
+            .disposed(by: disposeBag)
+        
+        moviesTableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
     }
     
@@ -50,3 +54,8 @@ class HomeViewController: UIViewController {
     
 }
 
+extension HomeViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 200
+    }
+}

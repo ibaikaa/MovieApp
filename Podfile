@@ -6,16 +6,21 @@ target 'MovieApp' do
   use_frameworks!
 
   # Pods for MovieApp
+  
+  # Для работы с сетевыми запросами
   pod 'Alamofire'  
 
+  # Rx
   pod 'RxSwift'
   pod 'RxCocoa'
   pod 'RxDataSources', '~> 4.0'
 
-  pod 'Kingfisher', '~> 7.0'
-
+  # Для верстки
   pod 'SnapKit'
   pod 'PaddingLabel', '1.2'
+
+  # Для удобного интерфейса для получения и отображения картинки по URL.
+  pod 'Kingfisher' 
 
 
   # Fixing bug

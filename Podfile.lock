@@ -17,7 +17,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
-  - Kingfisher (~> 7.0)
+  - Kingfisher
   - PaddingLabel (= 1.2)
   - RxCocoa
   - RxDataSources (~> 4.0)
@@ -47,6 +47,6 @@ SPEC CHECKSUMS:
   RxSwift: 915abbdfb62214aa89ccd0b194d44fb478019b27
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
 
-PODFILE CHECKSUM: cdf43e4f7a273e745d7494c64bd8a93753bc1581
+PODFILE CHECKSUM: 03a79de30dbfbd116e07ce33ce6b7d8c865e850f
 
 COCOAPODS: 1.12.0
