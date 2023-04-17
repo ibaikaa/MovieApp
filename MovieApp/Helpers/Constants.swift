@@ -21,6 +21,5 @@ struct Constants {
     
     /// Метод возвращает API ключ для доступа к IMDb API.
     public func getApiKey() -> String { API_KEY }
-    
 }
 

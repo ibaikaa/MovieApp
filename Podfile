@@ -14,6 +14,8 @@ target 'MovieApp' do
 
   pod 'Kingfisher', '~> 7.0'
 
+  pod 'SnapKit'
+
 
   # Fixing bug
 post_install do |installer|
