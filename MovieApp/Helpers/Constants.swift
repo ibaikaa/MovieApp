@@ -34,5 +34,12 @@ struct Constants {
         case posterPath = "posterPath"
     }
     
+    /// Название JSON файлов проекта
+    enum LottieAnimationJSONFileNames: String {
+        case fallingPopcorn = "fallingPopcorn"
+    }
+    
+    public let JSON = "json"
+    
 }
 

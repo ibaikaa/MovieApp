@@ -19,6 +19,10 @@ final class FavoriteMoviesViewModel {
         return favoriteMoviesSubject.asObservable()
     }
     
+    public var errorObservable: Observable<Error> {
+        return errorSubject.asObservable()
+    }
+
     // MARK: - Методы
     
     /// Метод получения списка избранных фильмов.

@@ -32,6 +32,7 @@
 		8C2C1B7729EF07C60067DDFD /* FavoriteMoviesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2C1B7629EF07C60067DDFD /* FavoriteMoviesViewModel.swift */; };
 		8C2C1B7C29EF16160067DDFD /* MoviesCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2C1B7B29EF16160067DDFD /* MoviesCollectionView.swift */; };
 		8C2C1B8429EF249A0067DDFD /* FavoriteMovie+Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2C1B8329EF249A0067DDFD /* FavoriteMovie+Item.swift */; };
+		8C2C1B8629EF59740067DDFD /* fallingPopcorn.json in Resources */ = {isa = PBXBuildFile; fileRef = 8C2C1B8529EF59740067DDFD /* fallingPopcorn.json */; };
 		8C34B1A629ED86B700753B8C /* MovieCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C34B1A529ED86B700753B8C /* MovieCollectionViewCell.swift */; };
 		8C6C6F4829ED9DCC008D53A8 /* UIColor+ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C6F4729ED9DCC008D53A8 /* UIColor+ColorExtension.swift */; };
 		8CB3EF7829ED52CB00A11D39 /* NetworkLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3EF7729ED52CB00A11D39 /* NetworkLayer.swift */; };
@@ -70,6 +71,7 @@
 		8C2C1B7629EF07C60067DDFD /* FavoriteMoviesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteMoviesViewModel.swift; sourceTree = "<group>"; };
 		8C2C1B7B29EF16160067DDFD /* MoviesCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesCollectionView.swift; sourceTree = "<group>"; };
 		8C2C1B8329EF249A0067DDFD /* FavoriteMovie+Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FavoriteMovie+Item.swift"; sourceTree = "<group>"; };
+		8C2C1B8529EF59740067DDFD /* fallingPopcorn.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = fallingPopcorn.json; sourceTree = "<group>"; };
 		8C34B1A529ED86B700753B8C /* MovieCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCollectionViewCell.swift; sourceTree = "<group>"; };
 		8C6C6F4729ED9DCC008D53A8 /* UIColor+ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+ColorExtension.swift"; sourceTree = "<group>"; };
 		8CB3EF7729ED52CB00A11D39 /* NetworkLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkLayer.swift; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 			children = (
 				8C20A3F729ECBB13003C3A95 /* Assets.xcassets */,
 				8C20A3FC29ECBB13003C3A95 /* Info.plist */,
+				8C2C1B8729EF5EB20067DDFD /* JSON */,
 				8C20A3F929ECBB13003C3A95 /* LaunchScreen.storyboard */,
 			);
 			path = Resources;
@@ -318,6 +321,22 @@
 			path = CollectionView;
 			sourceTree = "<group>";
 		};
+		8C2C1B8729EF5EB20067DDFD /* JSON */ = {
+			isa = PBXGroup;
+			children = (
+				8C2C1B8829EF5EB50067DDFD /* LottieAnimations */,
+			);
+			path = JSON;
+			sourceTree = "<group>";
+		};
+		8C2C1B8829EF5EB50067DDFD /* LottieAnimations */ = {
+			isa = PBXGroup;
+			children = (
+				8C2C1B8529EF59740067DDFD /* fallingPopcorn.json */,
+			);
+			path = LottieAnimations;
+			sourceTree = "<group>";
+		};
 		8CB3EF7429ED52B500A11D39 /* NetworkLayer */ = {
 			isa = PBXGroup;
 			children = (
@@ -408,6 +427,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8C20A3FB29ECBB13003C3A95 /* LaunchScreen.storyboard in Resources */,
+				8C2C1B8629EF59740067DDFD /* fallingPopcorn.json in Resources */,
 				8C20A3F829ECBB13003C3A95 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
