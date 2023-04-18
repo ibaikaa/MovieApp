@@ -18,7 +18,7 @@ final class MovieDetailedViewModel {
     
     // MARK: - Публичные свойства
     public var showAlert: ((String) -> Void)?
-
+    
     // MARK: - Инициализатор
     init(movie: Item) {
         self.movie = movie
@@ -81,21 +81,43 @@ final class MovieDetailedViewModel {
     }
     
     // MARK: - Сохранение данных в CoreDataManager
-    public func isFavorite()  {
+    private var favoriteMovies: [FavoriteMovie] = []
+    
+    
+    public func isFavorite() -> Bool {
+        var isFavorite = true
         coreDataManager.fetchFavoriteMovies { [unowned self] result in
             switch result {
             case .success(let movies):
-                movies.forEach { print($0.title ?? "No data") }
+                self.favoriteMovies = movies
+                isFavorite = movies.map { $0.title == movie.title }.contains(true)
             case .failure(let error):
                 self.showAlert?(error.localizedDescription)
+                isFavorite = false
             }
         }
+        print("Избранное: \(isFavorite)")
+        return isFavorite
     }
     
     
     public func addFavoriteMovie() {
         let title = movie.title ?? "No Data"
+        print("Добавить movie: \(title)")
         coreDataManager.saveFavoriteMovie(title: title) { [unowned self] error in
+            if let error = error {
+                self.showAlert?(error.localizedDescription)
+            }
+        }
+    }
+    
+    public func removeMovieFromFavorites() {
+        guard let movieToDelete = favoriteMovies.first(where: { $0.title == movie.title } ) else {
+            return
+        }
+        
+        print("Удалить movie: \(movieToDelete.title)")
+        coreDataManager.removeMovieFromFavorites(movieToDelete){ [unowned self] error in
             if let error = error {
                 self.showAlert?(error.localizedDescription)
             }

@@ -11,7 +11,7 @@ import UIKit
 final class CoreDataManager {
     static let shared = CoreDataManager()
     
-    private var persistentContainer: NSPersistentContainer = {
+    var persistentContainer: NSPersistentContainer = {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             fatalError("Unable to retrieve App Delegate")
         }
@@ -77,7 +77,6 @@ final class CoreDataManager {
         } catch {
             completion(error)
         }
-
     }
         
 }
