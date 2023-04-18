@@ -31,7 +31,6 @@ final class MovieListViewModel {
                 onNext: { movieGroup in
                     if let movies = movieGroup.items {
                         self.moviesSubject.onNext(movies)
-                        print("Emmited movies: \(movies.count)")
                     }
                 },
                 onError: { error in

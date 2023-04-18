@@ -169,7 +169,7 @@ final class MovieCollectionViewCell: UICollectionViewCell {
         posterImageView.kf
             .setImage(
                 with: URL(string: movie.posterPath ?? "" ),
-                placeholder: UIImage(systemName: "popcorn.circle.fill")
+                placeholder: UIImage(systemName: "popcorn.fill")
             )
         
         // Установка значений для лейблов через интерполяцию. Вскрываю опциональные значения через коализию.
