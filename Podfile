@@ -22,6 +22,9 @@ target 'MovieApp' do
 
   # Для удобного интерфейса для получения и отображения картинки по URL.
   pod 'Kingfisher' 
+   
+  # Для добавления анимаций
+  pod 'lottie-ios'
 
 
   # Fixing bug
