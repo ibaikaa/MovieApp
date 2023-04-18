@@ -7,6 +7,7 @@
 
 import CoreData
 
-final class FavoriteMovie: NSManagedObject {
+@objc(FavoriteMovie)
+class FavoriteMovie: NSManagedObject {
     @NSManaged var title: String?
 }

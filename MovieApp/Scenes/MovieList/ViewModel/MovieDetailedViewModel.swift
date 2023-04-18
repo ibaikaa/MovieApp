@@ -11,6 +11,7 @@ import RxSwift
 
 final class MovieDetailedViewModel {
     // MARK: - Приватные свойства
+    private let coreDataManager = CoreDataManager.shared
     private let networkLayer = NetworkLayer.shared
     private let disposeBag = DisposeBag()
     private var movie: Item
@@ -77,6 +78,28 @@ final class MovieDetailedViewModel {
                 self?.showAlert?(error.localizedDescription)
             })
             .disposed(by: disposeBag)
+    }
+    
+    // MARK: - Сохранение данных в CoreDataManager
+    public func isFavorite()  {
+        coreDataManager.fetchFavoriteMovies { [unowned self] result in
+            switch result {
+            case .success(let movies):
+                movies.forEach { print($0.title ?? "No data") }
+            case .failure(let error):
+                self.showAlert?(error.localizedDescription)
+            }
+        }
+    }
+    
+    
+    public func addFavoriteMovie() {
+        let title = movie.title ?? "No Data"
+        coreDataManager.saveFavoriteMovie(title: title) { [unowned self] error in
+            if let error = error {
+                self.showAlert?(error.localizedDescription)
+            }
+        }
     }
     
 }

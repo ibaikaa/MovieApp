@@ -204,6 +204,7 @@ final class MovieDetailedViewController: UIViewController {
     @objc
     private func didTapAddToFavoritesButton() {
         heartButton.flipLikedState()
+        viewModel?.addFavoriteMovie()
     }
     
     // MARK: - ViewController Life Cycle
@@ -212,6 +213,11 @@ final class MovieDetailedViewController: UIViewController {
         initViewModel()
         updateUI()
         configureNavigationBar()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel?.isFavorite()
     }
     
 }

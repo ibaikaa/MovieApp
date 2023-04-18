@@ -36,7 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "MovieApp")
+        let container = NSPersistentContainer(name: "FavoriteMovies")
         container.loadPersistentStores { storeDescription, error in
             if let error = error  as? NSError {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
