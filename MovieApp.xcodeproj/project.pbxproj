@@ -26,6 +26,10 @@
 		8C2C1B5329EEC1D90067DDFD /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2C1B5229EEC1D90067DDFD /* UIViewController+Alert.swift */; };
 		8C2C1B5A29EED2980067DDFD /* HeartButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2C1B5929EED2980067DDFD /* HeartButton.swift */; };
 		8C2C1B5C29EED3F70067DDFD /* UIButton+UIBarButtonItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2C1B5B29EED3F60067DDFD /* UIButton+UIBarButtonItem.swift */; };
+		8C2C1B6029EED75B0067DDFD /* FavoriteMovies.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8C2C1B5E29EED75B0067DDFD /* FavoriteMovies.xcdatamodeld */; };
+		8C2C1B6229EED81B0067DDFD /* FavoriteMovie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2C1B6129EED81B0067DDFD /* FavoriteMovie.swift */; };
+		8C2C1B6529EED9A00067DDFD /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2C1B6429EED9A00067DDFD /* CoreDataManager.swift */; };
+		8C2C1B6729EEDE840067DDFD /* CoreDataError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2C1B6629EEDE840067DDFD /* CoreDataError.swift */; };
 		8C34B1A629ED86B700753B8C /* MovieCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C34B1A529ED86B700753B8C /* MovieCollectionViewCell.swift */; };
 		8C6C6F4829ED9DCC008D53A8 /* UIColor+ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C6F4729ED9DCC008D53A8 /* UIColor+ColorExtension.swift */; };
 		8CB3EF7829ED52CB00A11D39 /* NetworkLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3EF7729ED52CB00A11D39 /* NetworkLayer.swift */; };
@@ -58,6 +62,10 @@
 		8C2C1B5229EEC1D90067DDFD /* UIViewController+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alert.swift"; sourceTree = "<group>"; };
 		8C2C1B5929EED2980067DDFD /* HeartButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartButton.swift; sourceTree = "<group>"; };
 		8C2C1B5B29EED3F60067DDFD /* UIButton+UIBarButtonItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+UIBarButtonItem.swift"; sourceTree = "<group>"; };
+		8C2C1B5F29EED75B0067DDFD /* Movies.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Movies.xcdatamodel; sourceTree = "<group>"; };
+		8C2C1B6129EED81B0067DDFD /* FavoriteMovie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteMovie.swift; sourceTree = "<group>"; };
+		8C2C1B6429EED9A00067DDFD /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		8C2C1B6629EEDE840067DDFD /* CoreDataError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataError.swift; sourceTree = "<group>"; };
 		8C34B1A529ED86B700753B8C /* MovieCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCollectionViewCell.swift; sourceTree = "<group>"; };
 		8C6C6F4729ED9DCC008D53A8 /* UIColor+ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+ColorExtension.swift"; sourceTree = "<group>"; };
 		8CB3EF7729ED52CB00A11D39 /* NetworkLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkLayer.swift; sourceTree = "<group>"; };
@@ -135,6 +143,7 @@
 			isa = PBXGroup;
 			children = (
 				8C20A40329ECBC64003C3A95 /* App */,
+				8C2C1B5D29EED7040067DDFD /* Data */,
 				8C20A41A29ECC0E8003C3A95 /* Extensions */,
 				8C20A41929ECC0E2003C3A95 /* Helpers */,
 				8C20A40229ECBBD6003C3A95 /* Resources */,
@@ -223,6 +232,7 @@
 		8C20A41B29ECC0EE003C3A95 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				8C2C1B6329EED9960067DDFD /* CoreDataManager */,
 				8CB3EF7429ED52B500A11D39 /* NetworkLayer */,
 			);
 			path = Services;
@@ -258,6 +268,24 @@
 				8C2C1B5929EED2980067DDFD /* HeartButton.swift */,
 			);
 			path = HeartButton;
+			sourceTree = "<group>";
+		};
+		8C2C1B5D29EED7040067DDFD /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				8C2C1B5E29EED75B0067DDFD /* FavoriteMovies.xcdatamodeld */,
+				8C2C1B6129EED81B0067DDFD /* FavoriteMovie.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		8C2C1B6329EED9960067DDFD /* CoreDataManager */ = {
+			isa = PBXGroup;
+			children = (
+				8C2C1B6429EED9A00067DDFD /* CoreDataManager.swift */,
+				8C2C1B6629EEDE840067DDFD /* CoreDataError.swift */,
+			);
+			path = CoreDataManager;
 			sourceTree = "<group>";
 		};
 		8CB3EF7429ED52B500A11D39 /* NetworkLayer */ = {
@@ -406,6 +434,7 @@
 				8C2C1B4F29EE9CB60067DDFD /* MovieYouTubeTrailerDTO.swift in Sources */,
 				8C2C1B5129EEB7DC0067DDFD /* Int+PlaceEmojiHandling.swift in Sources */,
 				8C2C1B4D29EE87A00067DDFD /* MovieDetailedViewModel.swift in Sources */,
+				8C2C1B6729EEDE840067DDFD /* CoreDataError.swift in Sources */,
 				8CB3EF7829ED52CB00A11D39 /* NetworkLayer.swift in Sources */,
 				8C20A3F329ECBB12003C3A95 /* MovieListViewController.swift in Sources */,
 				8C2A27BF29ED9713002E6504 /* FavoriteMoviesViewController.swift in Sources */,
@@ -417,13 +446,16 @@
 				8C0AFDB029ED68DF0099B594 /* ApiError.swift in Sources */,
 				8C6C6F4829ED9DCC008D53A8 /* UIColor+ColorExtension.swift in Sources */,
 				8C2A27C129ED972B002E6504 /* SettingsViewController.swift in Sources */,
+				8C2C1B6229EED81B0067DDFD /* FavoriteMovie.swift in Sources */,
 				8C20A3F129ECBB12003C3A95 /* SceneDelegate.swift in Sources */,
 				8C2C1B5329EEC1D90067DDFD /* UIViewController+Alert.swift in Sources */,
 				8C0AFDAE29ED62120099B594 /* MovieDTO.swift in Sources */,
+				8C2C1B6529EED9A00067DDFD /* CoreDataManager.swift in Sources */,
 				8C34B1A629ED86B700753B8C /* MovieCollectionViewCell.swift in Sources */,
 				8CE0EA0929EDCC0A0045FC44 /* Int+CommasHandling.swift in Sources */,
 				8C0AFDAA29ED57260099B594 /* Constants.swift in Sources */,
 				8C2C1B5C29EED3F70067DDFD /* UIButton+UIBarButtonItem.swift in Sources */,
+				8C2C1B6029EED75B0067DDFD /* FavoriteMovies.xcdatamodeld in Sources */,
 				8C2C1B5A29EED2980067DDFD /* HeartButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -642,6 +674,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		8C2C1B5E29EED75B0067DDFD /* FavoriteMovies.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				8C2C1B5F29EED75B0067DDFD /* Movies.xcdatamodel */,
+			);
+			currentVersion = 8C2C1B5F29EED75B0067DDFD /* Movies.xcdatamodel */;
+			path = FavoriteMovies.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 8C20A3E329ECBB11003C3A95 /* Project object */;
 }
