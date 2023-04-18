@@ -10,8 +10,10 @@ import Cosmos
 import SnapKit
 import Kingfisher
 import SafariServices
+import RxSwift
 
 final class MovieDetailedViewController: UIViewController {
+    private let disposeBag = DisposeBag()
     // MARK: - ViewModel
     public var viewModel: MovieDetailedViewModel? {
         // Установка значений для UI-элементов после того, как viewModel инициализировалась.
@@ -113,22 +115,9 @@ final class MovieDetailedViewController: UIViewController {
         return button
     }()
     
+    private let addToFavoritesButton = HeartButton()
+    
     // MARK: - Методы
-    
-    /// Метод для инициализации свойств viewModel.
-    private func initViewModel() {
-        viewModel?.showAlert = { [weak self] error in
-            self?.showInfoAlert(title: "Error", message: error)
-        }
-    }
-    
-    /// Метод `playVideo(urlString: String)`, принимающий строку URL, и если ее можно перевести в URL, через SafariServices открывает окно Safari по ссылки на трейлер.
-    private func playVideo(urlString: String) {
-        if let url = URL(string: urlString) {
-            let safariVC = SFSafariViewController(url: url)
-            present(safariVC, animated: true)
-        }
-    }
     
     /// Метод для расстановки ограничений (constraints) для элементов и также задаем фон экрану.
     private func updateUI() {
@@ -186,38 +175,58 @@ final class MovieDetailedViewController: UIViewController {
         }
     }
     
-    private let heartButton = HeartButton()
-
+    /// Метод для инициализации свойств viewModel.
+    private func initViewModel() {
+        viewModel?.showAlert = { [weak self] error in
+            self?.showInfoAlert(title: "Error", message: error)
+        }
+    }
+    
+    /// Метод `playVideo(urlString: String)`, принимающий строку URL, и если ее можно перевести в URL, через SafariServices открывает окно Safari по ссылки на трейлер.
+    private func playVideo(urlString: String) {
+        if let url = URL(string: urlString) {
+            let safariVC = SFSafariViewController(url: url)
+            present(safariVC, animated: true)
+        }
+    }
+    
     ///  Метод для конфигурации навигационной панели сверху.
     private func configureNavigationBar() {
         title = "Detail Movie"
         navigationController?.navigationBar.topItem?.backButtonTitle = ""
         navigationController?.navigationBar.prefersLargeTitles = false
-        
-        heartButton.addTarget(
+    }
+    
+    private func setupAddToFavoritesButton() {
+        addToFavoritesButton.addTarget(
             self,
             action: #selector(didTapAddToFavoritesButton),
             for: .touchUpInside
         )
-        navigationItem.rightBarButtonItem = heartButton.toBarButtonItem()
+        navigationItem.rightBarButtonItem = addToFavoritesButton.toBarButtonItem()
     }
     
     @objc
     private func didTapAddToFavoritesButton() {
-        heartButton.flipLikedState()
+        addToFavoritesButton.flipLikedState()
         viewModel?.didTapAddToFavoritesButton()
     }
     
+    /// Метод для настройки состояния кнопки `AddToFavoritesButton` по свойству `isFavoriteMovie` у `MovieDetailedViewModel`.
     private func configureAddToFavoritesButton() {
-        guard let viewModel = viewModel else { return }
-        heartButton.isLiked = viewModel.isFavoriteMovie
+        viewModel?.isFavoriteMovieObservable
+            .subscribe(onNext: { [weak self] isFavorite in
+                self?.addToFavoritesButton.isLiked = isFavorite
+            })
+            .disposed(by: disposeBag)
     }
-    
+
     // MARK: - ViewController Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         initViewModel()
         updateUI()
+        setupAddToFavoritesButton()
         configureNavigationBar()
     }
     

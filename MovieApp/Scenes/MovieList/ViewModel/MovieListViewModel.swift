@@ -13,18 +13,15 @@ final class MovieListViewModel {
     
     private let moviesSubject = PublishSubject<[Item]>()
     private let errorSubject = PublishSubject<Error>()
+    private let disposeBag = DisposeBag()
     
-    var moviesObservable: Observable<[Item]> {
+    public var moviesObservable: Observable<[Item]> {
         return moviesSubject.asObservable()
     }
     
-    private let disposeBag = DisposeBag()
-    
     // MARK: - Методы
     
-    /**
-     Метод получения списка фильмов.
-     */
+    /// Метод получения списка фильмов.
     public func getMovies() {
         networkLayer.getMovieList()
             .subscribe(

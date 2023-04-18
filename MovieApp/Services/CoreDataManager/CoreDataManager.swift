@@ -107,7 +107,7 @@ final class CoreDataManager {
         
     }
     
-    /// Метод для стягивания данных с CoreData
+    /// Базовый метод для получения данных с `CoreData`.  Удобен для получения массива из избранных фильмов и применяется в `MovieDetailedViewModel`
     public func fetchFavoriteMovies(
         completion: @escaping ( (Result<[FavoriteMovie], Error>) -> Void)
     ) {
@@ -121,7 +121,24 @@ final class CoreDataManager {
         }
     }
     
-    
+    /// Метод для получения данных с `CoreData` через `Rx`. Удобен для получения наблюдаемого массива из избранных фильмов и применяется в `FavoriteMoviesViewModel`.
+    public func fetchFavoriteMovies() -> Observable<[FavoriteMovie]> {
+        return Observable<[FavoriteMovie]>.create { [unowned self] observer in
+            let managedContext = self.persistentContainer.viewContext
+            let fetchData = NSFetchRequest<FavoriteMovie>(entityName: "FavoriteMovie")
+            
+            do {
+                let favoriteMovies = try managedContext.fetch(fetchData)
+                observer.onNext(favoriteMovies)
+                observer.onCompleted()
+            } catch {
+                observer.onError(error)
+            }
+            
+            return Disposables.create()
+        }
+    }
+
     /// Метод для удаления объекта из CoreData.
     func removeMovieFromFavorites(
         _ movieToDelete: FavoriteMovie,
@@ -135,21 +152,6 @@ final class CoreDataManager {
             completion(nil)
         } catch {
             completion(error)
-        }
-    }
-    
-    public func fetchRX() -> Observable<[FavoriteMovie]> {
-        return Observable<[FavoriteMovie]>.create { [unowned self] observer in
-            let managedContext = self.persistentContainer.viewContext
-            let fetchData = NSFetchRequest<FavoriteMovie>(entityName: "FavoriteMovie")
-            do {
-                let favoriteMovies = try managedContext.fetch(fetchData)
-                observer.onNext(favoriteMovies)
-                observer.onCompleted()
-            } catch {
-                observer.onError(error)
-            }
-            return Disposables.create()
         }
     }
     

@@ -6,38 +6,48 @@
 //
 
 import UIKit
-import SnapKit
-import RxCocoa
 import RxSwift
+import RxCocoa
 
 final class MovieListViewController: UIViewController {
-    // MARK: - Приватные свойства
+    // MARK: - Свойства
     private let viewModel = MovieListViewModel()
     private let disposeBag = DisposeBag()
     
-    private lazy var moviesCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 30
-        let collectionView = UICollectionView(
-            frame: .zero,
-            collectionViewLayout: layout
-        )
-        collectionView.backgroundColor = .clear
-        return collectionView
-    }()
-    
-    // UISearchController
+    // MARK: - UISearchController
     private let moviesSearchController = UISearchController(searchResultsController: nil)
     
-    // MARK: - Приватные методы
-    private func configureMoviesCollectionView() {
-        // Регистрация кастомной ячейки
-        moviesCollectionView.register(
-            MovieCollectionViewCell.self,
-            forCellWithReuseIdentifier: MovieCollectionViewCell.identifier
-        )
+    /// Метод для настройки `moviesSearchController'а`.
+    private func configureSearchController() {
+        // Стиль searchBar'a
+        moviesSearchController.searchBar.barStyle = .black
+        // Placeholder
+        moviesSearchController.searchBar.searchTextField.placeholder = "Search movie by name"
         
-        /// Связывание данных для `moviesCollectionView` от `viewModel`
+        /// Установка `searchController'а` для `navigationItem`
+        navigationItem.searchController = moviesSearchController
+        
+        // Установка, чтоб при скролле было видно и title и поисковик.
+        moviesSearchController.hidesNavigationBarDuringPresentation = false
+        navigationItem.hidesSearchBarWhenScrolling = false
+    }
+    
+    // MARK: - UICollectionView
+    private let moviesCollectionView = MoviesCollectionView()
+    
+    /// Метод для установки констрейнтов.
+    private func setupSubviews() {
+        view.addSubview(moviesCollectionView)
+        moviesCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
+            make.left.equalToSuperview().offset(16)
+            make.right.equalToSuperview().offset(-16)
+            make.bottom.equalToSuperview()
+        }
+    }
+        
+    /// Метод для связывания `moviesCollectionView` с данными с `viewModel`.
+    private func bindCollectionView() {
         viewModel.moviesObservable
             .bind(to: moviesCollectionView.rx.items(
                 cellIdentifier: MovieCollectionViewCell.identifier
@@ -48,50 +58,34 @@ final class MovieListViewController: UIViewController {
                 cell.configure(with: movie)
             }
             .disposed(by: disposeBag)
-        
-        /// Отлавливание нажатия на ячейку через `rx`
-        moviesCollectionView.rx
-            .modelSelected(Item.self)
-            .subscribe { movie in
+    }
+    
+    /// Метод для связывания `moviesCollectionView` с данными с `viewModel`.
+    private func handleCellSelection() {
+        moviesCollectionView.rx.modelSelected(Item.self)
+            .subscribe { [weak self] movie in
                 let vc = MovieDetailedViewController()
                 vc.viewModel = MovieDetailedViewModel(movie: movie)
-                self.navigationController?.pushViewController(vc, animated: true)
+                self?.navigationController?.pushViewController(vc, animated: true)
             } onError: { error in
                 print(error.localizedDescription)
             }
             .disposed(by: disposeBag)
-        
-        
-        /// Установка `delegate` через `rx`
+    }
+    
+    /// Метод для установки делегата  для `moviesCollectionView`.
+    private func setCollectionViewDelegate() {
         moviesCollectionView.rx
             .setDelegate(self)
             .disposed(by: disposeBag)
     }
     
-    /// Метод для установки констрейнтов.
-    private func updateUI() {
-        view.addSubview(moviesCollectionView)
-        moviesCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
-            make.left.equalToSuperview().offset(16)
-            make.right.equalToSuperview().offset(-16)
-            make.bottom.equalToSuperview()
-        }
-    }
-    
-    /// Метод для настройки `moviesSearchController'а`.
-    private func configureSearchController() {
-        moviesSearchController.searchBar.barStyle = .black // Стиль searchBar'a
-        
-        moviesSearchController.searchBar.searchTextField.placeholder = "Search movie by name" // Placeholder
-        
-        /// Установка `searchController'а` для `navigationItem`
-        navigationItem.searchController = moviesSearchController
-        
-        // Установка, чтоб при скролле было видно и title и поисковик.
-        navigationItem.searchController?.hidesNavigationBarDuringPresentation = false
-        navigationItem.hidesSearchBarWhenScrolling = false
-        
+    // MARK: - Приватные методы
+    private func configureMoviesCollectionView() {
+        bindCollectionView()
+        handleCellSelection()
+        setCollectionViewDelegate()
+        setupSubviews()
     }
     
     // MARK: - ViewController Life Cycle
@@ -100,7 +94,6 @@ final class MovieListViewController: UIViewController {
         viewModel.getMovies()
         configureSearchController()
         configureMoviesCollectionView()
-        updateUI()
     }
     
 }
