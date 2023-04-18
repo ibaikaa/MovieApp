@@ -7,6 +7,7 @@
 
 import CoreData
 import UIKit
+import RxSwift
 
 final class CoreDataManager {
     // MARK: - Singleton
@@ -15,7 +16,7 @@ final class CoreDataManager {
     
     // MARK: - Приватные свойства
     
-    /// Получение persistentContainer'а из AppDelegate.
+    /// Получение `persistentContainer'а` из `AppDelegate`.
     private var persistentContainer: NSPersistentContainer = {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             fatalError("Unable to retrieve App Delegate")
@@ -31,11 +32,13 @@ final class CoreDataManager {
     public func saveFavoriteMovie(
         id: String,
         title: String,
+        fullTitle: String,
         year: String,
         rank: String,
         rating: String,
         ratingCount: String,
         crew: String,
+        posterPath: String,
         completion: @escaping ( (Error?) -> Void)
     ) {
         let managedContext = persistentContainer.viewContext
@@ -61,6 +64,11 @@ final class CoreDataManager {
         )
         
         favoriteMovie.setValue(
+            fullTitle,
+            forKey: Constants.EntityAttributeKeys.fullTitle.rawValue
+        )
+        
+        favoriteMovie.setValue(
             year,
             forKey: Constants.EntityAttributeKeys.year.rawValue
         )
@@ -83,6 +91,11 @@ final class CoreDataManager {
         favoriteMovie.setValue(
             crew,
             forKey: Constants.EntityAttributeKeys.crew.rawValue
+        )
+        
+        favoriteMovie.setValue(
+            posterPath,
+            forKey: Constants.EntityAttributeKeys.posterPath.rawValue
         )
         
         do {
@@ -122,6 +135,21 @@ final class CoreDataManager {
             completion(nil)
         } catch {
             completion(error)
+        }
+    }
+    
+    public func fetchRX() -> Observable<[FavoriteMovie]> {
+        return Observable<[FavoriteMovie]>.create { [unowned self] observer in
+            let managedContext = self.persistentContainer.viewContext
+            let fetchData = NSFetchRequest<FavoriteMovie>(entityName: "FavoriteMovie")
+            do {
+                let favoriteMovies = try managedContext.fetch(fetchData)
+                observer.onNext(favoriteMovies)
+                observer.onCompleted()
+            } catch {
+                observer.onError(error)
+            }
+            return Disposables.create()
         }
     }
     

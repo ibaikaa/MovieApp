@@ -26,11 +26,13 @@ struct Constants {
     enum EntityAttributeKeys: String {
         case id = "id"
         case title = "title"
+        case fullTitle = "fullTitle"
         case year = "year"
         case rank = "rank"
         case rating = "rating"
         case ratingCount = "ratingCount"
         case crew = "crew"
+        case posterPath = "posterPath"
     }
     
 }

@@ -114,11 +114,13 @@ final class MovieDetailedViewModel {
         coreDataManager.saveFavoriteMovie(
             id: movie.id,
             title: movie.title ?? "No Data",
+            fullTitle: movie.fullTitle ?? "No Data",
             year: movie.year ?? "No Data",
             rank: movie.rank ?? "No Data",
             rating: movie.rating ?? "No Data",
             ratingCount: movie.ratingCount ?? "No Data",
-            crew: movie.crew ?? "No Data"
+            crew: movie.crew ?? "No Data",
+            posterPath: movie.posterPath ?? "No Data"
         ) { [unowned self] error in
             if let error = error {
                 self.showAlert?(error.localizedDescription)
