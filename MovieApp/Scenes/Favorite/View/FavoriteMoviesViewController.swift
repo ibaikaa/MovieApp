@@ -63,12 +63,15 @@ final class FavoriteMoviesViewController: UIViewController {
         favoriteMoviesCollectionView.rx
             .modelSelected(FavoriteMovie.self)
             .subscribe { [weak self] favoriteMovie in
-                guard let self = self else { return }
+                guard let `self` = self else { return }
                 let vc = MovieDetailedViewController()
-                vc.viewModel = MovieDetailedViewModel(movie: favoriteMovie.toMovieItem())
+                vc.viewModel = MovieDetailedViewModel(
+                    movie: favoriteMovie.toMovieItem(),
+                    detailedVCForFavoriteMovie: true
+                )
                 self.navigationController?.pushViewController(vc, animated: true)
             } onError: { error in
-                print(error.localizedDescription)
+                self.showInfoAlert(title: "Error", message: error.localizedDescription)
             }
             .disposed(by: disposeBag)
     }
@@ -92,6 +95,7 @@ final class FavoriteMoviesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureFavoriteMoviesCollectionView()
+        configureSearchController()
     }
     
     override func viewWillAppear(_ animated: Bool) {

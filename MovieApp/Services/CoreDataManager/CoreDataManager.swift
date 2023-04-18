@@ -29,7 +29,7 @@ final class CoreDataManager {
     // MARK: - Публичные методы
     
     /// Метод сохранения данных в CoreData
-    public func saveFavoriteMovie(
+    public func addMovieToFavorites(
         id: String,
         title: String,
         fullTitle: String,
@@ -123,7 +123,9 @@ final class CoreDataManager {
     
     /// Метод для получения данных с `CoreData` через `Rx`. Удобен для получения наблюдаемого массива из избранных фильмов и применяется в `FavoriteMoviesViewModel`.
     public func fetchFavoriteMovies() -> Observable<[FavoriteMovie]> {
-        return Observable<[FavoriteMovie]>.create { [unowned self] observer in
+        return Observable<[FavoriteMovie]>.create { [weak self] observer in
+            guard let `self` = self else { return Disposables.create() }
+            
             let managedContext = self.persistentContainer.viewContext
             let fetchData = NSFetchRequest<FavoriteMovie>(entityName: "FavoriteMovie")
             

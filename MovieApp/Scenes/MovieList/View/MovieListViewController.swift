@@ -64,11 +64,15 @@ final class MovieListViewController: UIViewController {
     private func handleCellSelection() {
         moviesCollectionView.rx.modelSelected(Item.self)
             .subscribe { [weak self] movie in
+                guard let `self` = self else { return }
                 let vc = MovieDetailedViewController()
-                vc.viewModel = MovieDetailedViewModel(movie: movie)
-                self?.navigationController?.pushViewController(vc, animated: true)
+                vc.viewModel = MovieDetailedViewModel(
+                    movie: movie,
+                    detailedVCForFavoriteMovie: false
+                )
+                self.navigationController?.pushViewController(vc, animated: true)
             } onError: { error in
-                print(error.localizedDescription)
+                self.showInfoAlert(title: "Error", message: error.localizedDescription)
             }
             .disposed(by: disposeBag)
     }

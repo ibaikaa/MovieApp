@@ -82,7 +82,7 @@ final class NetworkLayer {
         guard let url = ApiType.youtubeTrailerByID(id: id).url else {
             return Observable.error(ApiError.invalidURL)
         }
-        print(url)
+        
         return Observable<MovieWithTrailer>.create { observer in
             let request = AF.request(
                 url,
@@ -107,9 +107,11 @@ final class NetworkLayer {
                     }
                 }
             }
+            
             return Disposables.create {
                 request.cancel()
             }
+            
         }
     }
     

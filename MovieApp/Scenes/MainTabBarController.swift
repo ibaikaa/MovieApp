@@ -54,8 +54,6 @@ final class MainTabBarController: UITabBarController {
             .foregroundColor: UIColor.white
         ]
         
-        navigationController.navigationBar.prefersLargeTitles = true
-        
         return navigationController
     }
 
@@ -74,12 +72,6 @@ final class MainTabBarController: UITabBarController {
                 title: "Favorites",
                 image: UIImage(systemName: "heart"),
                 selectedImage: UIImage(systemName: "heart.fill")
-            ),
-            generateVC(
-                viewController: SettingsViewController(),
-                title: "Settings",
-                image: UIImage(systemName: "slider.horizontal.3"),
-                selectedImage: UIImage(systemName: "slider.horizontal.3")
             )
         ]
         
@@ -89,7 +81,6 @@ final class MainTabBarController: UITabBarController {
     private func setTabBarTrans() {
         tabBar.backgroundImage = UIImage()
         tabBar.shadowImage = UIImage()
-//        tabBar.isTranslucent = false
     }
     
     /// Метод настройки дизайна `UITabBar'а`.

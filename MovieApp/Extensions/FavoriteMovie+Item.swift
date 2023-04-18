@@ -19,7 +19,7 @@ extension FavoriteMovie {
             posterPath: posterPath,
             crew: crew,
             rating: rating,
-            ratingCount: rating
+            ratingCount: ratingCount
         )
     }
     

@@ -7,14 +7,14 @@
 
 import UIKit
 import Cosmos
-import SnapKit
 import Kingfisher
 import SafariServices
 import RxSwift
 
 final class MovieDetailedViewController: UIViewController {
-    private let disposeBag = DisposeBag()
-    // MARK: - ViewModel
+    // MARK: - Свойства
+    private var disposeBag = DisposeBag()
+    
     public var viewModel: MovieDetailedViewModel? {
         // Установка значений для UI-элементов после того, как viewModel инициализировалась.
         didSet {
@@ -99,9 +99,9 @@ final class MovieDetailedViewController: UIViewController {
     }()
     
     private lazy var watchTrailerButton: UIButton = {
-        let watchTrailerAction = UIAction { [unowned self] action in
-            self.viewModel?.getTrailerURLString(completion: { urlString in
-                self.playVideo(urlString: urlString)
+        let watchTrailerAction = UIAction { [weak self] action in
+            self?.viewModel?.getTrailerURLString(completion: { urlString in
+                self?.playVideo(urlString: urlString)
             })
         }
         
@@ -182,7 +182,7 @@ final class MovieDetailedViewController: UIViewController {
         }
     }
     
-    /// Метод `playVideo(urlString: String)`, принимающий строку URL, и если ее можно перевести в URL, через SafariServices открывает окно Safari по ссылки на трейлер.
+    /// Метод `playVideo(urlString: String)`, принимающий строку URL, и если ее можно перевести в URL, через `SafariServices` открывает окно Safari по ссылки на трейлер. Применяется для `watchTrailerButton`.
     private func playVideo(urlString: String) {
         if let url = URL(string: urlString) {
             let safariVC = SFSafariViewController(url: url)
@@ -191,12 +191,12 @@ final class MovieDetailedViewController: UIViewController {
     }
     
     ///  Метод для конфигурации навигационной панели сверху.
-    private func configureNavigationBar() {
+    private func configureNavigationBarTitle() {
         title = "Detail Movie"
         navigationController?.navigationBar.topItem?.backButtonTitle = ""
-        navigationController?.navigationBar.prefersLargeTitles = false
     }
     
+    /// Метод для добавления `addToFavoritesButton` к навигационной панели сверху в качестве кнопки справа.
     private func setupAddToFavoritesButton() {
         addToFavoritesButton.addTarget(
             self,
@@ -204,16 +204,49 @@ final class MovieDetailedViewController: UIViewController {
             for: .touchUpInside
         )
         navigationItem.rightBarButtonItem = addToFavoritesButton.toBarButtonItem()
+        
+        // Если открыт детальный экран для избранного фильма, кнопка добавления/удаления из избранных недоступна для нажатий. В ином случае – доступна.
+        guard let viewModel = viewModel else { return }
+        if viewModel.detailedVCForFavoriteMovie {
+            addToFavoritesButton.isUserInteractionEnabled = false
+        }
+   
     }
     
     @objc
     private func didTapAddToFavoritesButton() {
-        addToFavoritesButton.flipLikedState()
-        viewModel?.didTapAddToFavoritesButton()
+        self.addToFavoritesButton.flipLikedState()
+        self.viewModel?.didTapAddToFavoritesButton()
     }
     
-    /// Метод для настройки состояния кнопки `AddToFavoritesButton` по свойству `isFavoriteMovie` у `MovieDetailedViewModel`.
-    private func configureAddToFavoritesButton() {
+    /// Метод для вызова алерта с подтверждением действий.
+    private func showConfirmActionAlert() {
+        guard let viewModel = viewModel else {
+            showInfoAlert(title: "Error", message: "Unexpected error. Please try again later.")
+            return
+        }
+        
+        let message = viewModel.isFavoriteMovie ? "Delete the movie from Favorites?" : " Add the movie to Favorites?"
+        
+        let alert = UIAlertController(
+            title: "Confirm your action",
+            message: message,
+            preferredStyle: .alert
+        )
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
+        let confirmAction = UIAlertAction(title: "Yes", style: .default) { handler in
+        
+        }
+        
+        alert.addAction(cancelAction)
+        alert.addAction(confirmAction)
+
+        present(alert, animated: true)
+    }
+    
+    /// Метод для настройки состояния кнопки `AddToFavoritesButton` по свойству `isFavoriteMovie` у `MovieDetailedViewModel` через наблюдаемое свойство.
+    private func bindAddToFavoritesButtonToObservableState() {
         viewModel?.isFavoriteMovieObservable
             .subscribe(onNext: { [weak self] isFavorite in
                 self?.addToFavoritesButton.isLiked = isFavorite
@@ -227,12 +260,8 @@ final class MovieDetailedViewController: UIViewController {
         initViewModel()
         updateUI()
         setupAddToFavoritesButton()
-        configureNavigationBar()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        configureAddToFavoritesButton()
+        configureNavigationBarTitle()
+        bindAddToFavoritesButtonToObservableState()
     }
     
 }

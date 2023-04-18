@@ -18,11 +18,12 @@ final class MovieDetailedViewModel {
     
     // MARK: - Публичные свойства
     public var showAlert: ((String) -> Void)?
+    public var detailedVCForFavoriteMovie: Bool
     
     // MARK: - Инициализатор
-    init(movie: Item) {
+    init(movie: Item, detailedVCForFavoriteMovie: Bool) {
         self.movie = movie
-        fetchFavoriteMovies()
+        self.detailedVCForFavoriteMovie = detailedVCForFavoriteMovie
     }
     
     // MARK: - Публичные методы
@@ -33,7 +34,6 @@ final class MovieDetailedViewModel {
         guard let rank = movie.rank, let rankValue = Int(rank) else {
             return "No Data"
         }
-        
         if (1...3).contains(rankValue) {
             return "\(rank) \(rankValue.getRankEmoji())"
         } else {
@@ -76,7 +76,6 @@ final class MovieDetailedViewModel {
         networkLayer.getMovieWithTrailer(id: movie.id)
             .map { $0.videoURL }
             .subscribe(onNext: { videoURL in
-                print(videoURL) // https://www.youtube.com/watch?v=K_tLp7T6U1c
                 completion(videoURL)
             }, onError: { [weak self] error in
                 self?.showAlert?(error.localizedDescription)
@@ -86,44 +85,60 @@ final class MovieDetailedViewModel {
     
     // MARK: - Работы с данными CoreDataManager
     
-    /// Метод для стягивания всех избранных фильмов. Нужен для того, чтоб получить текущий фильм в виде класса `FavoriteMovie`
-    private func fetchFavoriteMovies() {
-        coreDataManager.fetchFavoriteMovies { [unowned self] result in
-            switch result {
-            case .success(let movies):
-                movieAsFavorite = movies.first(where: { $0.id == movie.id })
-            case .failure(let error):
-                self.showAlert?(error.localizedDescription)
-            }
-        }
-    }
-    
-    /// Свойство, используемое для определения, фильм в избранном или нет.
-    public var isFavoriteMovie: Bool = false {
-        didSet {
-            print(isFavoriteMovie)
-        }
-    }
-    
-    private let isFavoriteMovieSubject = BehaviorSubject<Bool>(value: false)
-    public var isFavoriteMovieObservable: Observable<Bool> {
-        return isFavoriteMovieSubject.asObservable()
-    }
-
-   
     /// Свойство, необходимое для работы с CoreData (удаление/добавление)
     private var movieAsFavorite: FavoriteMovie? {
         didSet {
             // В избранных ли фильм определяется так: существует ли фильм в избранных.
             isFavoriteMovie = movieAsFavorite != nil
-            print("Фильм в избранном: \(movieAsFavorite != nil)")
             isFavoriteMovieSubject.onNext(isFavoriteMovie)
         }
     }
     
-    /// Метод для добавления фильма в CoreData.
-    private func addFavoriteMovie() {
-        coreDataManager.saveFavoriteMovie(
+    /// Свойство, используемое для определения, фильм в избранном или нет.
+    public var isFavoriteMovie: Bool = false
+    
+    /// Используется для реализации наблюдаемого свойства `isFavoriteMovieObservable`.
+    private let isFavoriteMovieSubject = BehaviorSubject<Bool>(value: false)
+    
+    /// Метод для получения всех избранных фильмов. Нужен для того, чтоб получить текущий фильм в виде класса `FavoriteMovie`
+    private func fetchFavoriteMovies() {
+        coreDataManager.fetchFavoriteMovies { [weak self] result in
+            guard let `self` = self else { return }
+            switch result {
+            case .success(let movies):
+                self.movieAsFavorite = movies.first(where: { $0.id == self.movie.id })
+            case .failure(let error):
+                self.showAlert?(error.localizedDescription)
+            }
+            self.isFavoriteMovieSubject.onNext(self.isFavoriteMovie)
+        }
+    }
+    
+    /// Наблюдаемое свойство за состоянием: избранный фильм или нет.
+    public var isFavoriteMovieObservable: Observable<Bool> {
+        return Observable.create { [weak self] observer in
+            self?.coreDataManager.fetchFavoriteMovies { result in
+                switch result {
+                case .success(let movies):
+                    self?.movieAsFavorite = movies.first(where: { $0.id == self?.movie.id })
+                case .failure(let error):
+                    observer.onError(error)
+                }
+                observer.onNext(self?.isFavoriteMovie ?? false)
+                observer.onCompleted()
+            }
+            return Disposables.create()
+        }
+    }
+    
+    /// Метод, срабатывающий при нажатии на кнопку и подтвержденном действии сохранения/удаления,
+    public func didTapAddToFavoritesButton() {
+        isFavoriteMovie ? removeMovieFromFavorites() : addMovieToFavorites()
+    }
+    
+    /// Метод сохранения объекта `FavoriteMovie` в `CoreData`.
+    private func addMovieToFavorites() {
+        coreDataManager.addMovieToFavorites(
             id: movie.id,
             title: movie.title ?? "No Data",
             fullTitle: movie.fullTitle ?? "No Data",
@@ -136,25 +151,26 @@ final class MovieDetailedViewModel {
         ) { [weak self] error in
             if let error = error {
                 self?.showAlert?(error.localizedDescription)
+            } else {
+                self?.fetchFavoriteMovies()
             }
         }
     }
     
-    /// Метод для удаления фильма из CoreData.
+    /// Метод удаления объекта `FavoriteMovie` из `CoreData`.
     private func removeMovieFromFavorites() {
-        guard let movieToDelete = movieAsFavorite else { return }
-        coreDataManager.removeMovieFromFavorites(movieToDelete){ [weak self] error in
+        guard let movieAsFavorite = movieAsFavorite else {
+            showAlert?("Couldn't delete movie from favorites. Please, try again.")
+            return
+        }
+        
+        coreDataManager.removeMovieFromFavorites(movieAsFavorite) { [weak self] error in
             if let error = error {
                 self?.showAlert?(error.localizedDescription)
+            } else {
+                self?.movieAsFavorite = nil
             }
         }
-        movieAsFavorite = nil
-    }
-    
-    /// Метод, вызывающийся при нажатии на кнопку.
-    public func didTapAddToFavoritesButton() {
-        fetchFavoriteMovies()
-        isFavoriteMovie ? removeMovieFromFavorites() : addFavoriteMovie()
     }
     
 }
