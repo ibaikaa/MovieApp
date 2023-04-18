@@ -25,6 +25,8 @@ enum ApiType: ApiTypeProtocol {
     /// - Параметр name: Имя фильма, которое нужно найти.
     case searchByMovieName(name: String)
     
+    case youtubeTrailerByID(id: String)
+    
     /// HTTP метод, используемый для API запроса.
     var method: HTTPMethod {
         switch self {
@@ -32,7 +34,10 @@ enum ApiType: ApiTypeProtocol {
             return .get
         case .searchByMovieName:
             return .get
+        case .youtubeTrailerByID:
+            return .get
         }
+        
     }
     
     /// Определение языка для API запроса, основанное на языке устройства пользователя.
@@ -48,6 +53,8 @@ enum ApiType: ApiTypeProtocol {
             return "API/Top250Movies/\(Constants.sharedInstance.getApiKey())"
         case .searchByMovieName(let name):
             return "API/SearchMovie/\(Constants.sharedInstance.getApiKey())/\(name)"
+        case .youtubeTrailerByID(let id):
+            return "API/YouTubeTrailer/\(Constants.sharedInstance.getApiKey())/\(id)"
         }
     }
     

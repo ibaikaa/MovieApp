@@ -12,7 +12,7 @@ final class MovieDetailedViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = viewModel?.getTitle()
+        title = "Detail Movie"
         navigationController?.navigationBar.topItem?.backButtonTitle = ""
         view.backgroundColor = .movieViewBackgroundColor
     }

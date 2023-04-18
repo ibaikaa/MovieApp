@@ -1,5 +1,5 @@
 //
-//  Movie.swift
+//  MovieDTO.swift
 //  MovieApp
 //
 //  Created by ibaikaa on 17/4/23.
@@ -14,6 +14,7 @@ struct MovieGroup: Decodable {
 
 /// Структура `Item`, содержащая в себе всю возможную информацию о фильме.
 struct Item: Decodable {
+    let id: String
     let rank: String?
     let title: String?
     let fullTitle: String?
@@ -26,7 +27,7 @@ struct Item: Decodable {
     /// `CodingKeys` для лучшей читабельности кода и названий свойств.
     /// Использовано для того, чтоб поменять `imDbRating` и `ImDbRatingCount` на `rating` и `ratingCount` соотвественно. Также для изменения `image` на `posterPath`.
     enum CodingKeys: String, CodingKey {
-        case rank, title, fullTitle, year
+        case id, rank, title, fullTitle, year
         case posterPath = "image"
         case crew
         case rating = "imDbRating"
