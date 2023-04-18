@@ -11,6 +11,7 @@ import SnapKit
 import Kingfisher
 import SafariServices
 
+
 final class MovieDetailedViewController: UIViewController {
     // MARK: - Свойства
     public var viewModel: MovieDetailedViewModel? {
@@ -184,24 +185,25 @@ final class MovieDetailedViewController: UIViewController {
         }
     }
     
+    private let heartButton = HeartButton()
+
     ///  Метод для конфигурации навигационной панели сверху.
     private func configureNavigationBar() {
         title = "Detail Movie"
         navigationController?.navigationBar.topItem?.backButtonTitle = ""
         navigationController?.navigationBar.prefersLargeTitles = false
         
-        let addToFavoritesButton = UIBarButtonItem(
-            image: UIImage(systemName: "heart"),
-            style: .plain,
-            target: self,
-            action: #selector(didTapAddToFavoritesButton)
+        heartButton.addTarget(
+            self,
+            action: #selector(didTapAddToFavoritesButton),
+            for: .touchUpInside
         )
-        navigationItem.rightBarButtonItem = addToFavoritesButton
+        navigationItem.rightBarButtonItem = heartButton.toBarButtonItem()
     }
     
     @objc
     private func didTapAddToFavoritesButton() {
-        print("Add to favorites")
+        heartButton.flipLikedState()
     }
     
     // MARK: - ViewController Life Cycle

@@ -24,6 +24,8 @@
 		8C2C1B4F29EE9CB60067DDFD /* MovieYouTubeTrailerDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2C1B4E29EE9CB60067DDFD /* MovieYouTubeTrailerDTO.swift */; };
 		8C2C1B5129EEB7DC0067DDFD /* Int+PlaceEmojiHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2C1B5029EEB7DC0067DDFD /* Int+PlaceEmojiHandling.swift */; };
 		8C2C1B5329EEC1D90067DDFD /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2C1B5229EEC1D90067DDFD /* UIViewController+Alert.swift */; };
+		8C2C1B5A29EED2980067DDFD /* HeartButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2C1B5929EED2980067DDFD /* HeartButton.swift */; };
+		8C2C1B5C29EED3F70067DDFD /* UIButton+UIBarButtonItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2C1B5B29EED3F60067DDFD /* UIButton+UIBarButtonItem.swift */; };
 		8C34B1A629ED86B700753B8C /* MovieCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C34B1A529ED86B700753B8C /* MovieCollectionViewCell.swift */; };
 		8C6C6F4829ED9DCC008D53A8 /* UIColor+ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C6F4729ED9DCC008D53A8 /* UIColor+ColorExtension.swift */; };
 		8CB3EF7829ED52CB00A11D39 /* NetworkLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3EF7729ED52CB00A11D39 /* NetworkLayer.swift */; };
@@ -54,6 +56,8 @@
 		8C2C1B4E29EE9CB60067DDFD /* MovieYouTubeTrailerDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieYouTubeTrailerDTO.swift; sourceTree = "<group>"; };
 		8C2C1B5029EEB7DC0067DDFD /* Int+PlaceEmojiHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+PlaceEmojiHandling.swift"; sourceTree = "<group>"; };
 		8C2C1B5229EEC1D90067DDFD /* UIViewController+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alert.swift"; sourceTree = "<group>"; };
+		8C2C1B5929EED2980067DDFD /* HeartButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartButton.swift; sourceTree = "<group>"; };
+		8C2C1B5B29EED3F60067DDFD /* UIButton+UIBarButtonItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+UIBarButtonItem.swift"; sourceTree = "<group>"; };
 		8C34B1A529ED86B700753B8C /* MovieCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCollectionViewCell.swift; sourceTree = "<group>"; };
 		8C6C6F4729ED9DCC008D53A8 /* UIColor+ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+ColorExtension.swift"; sourceTree = "<group>"; };
 		8CB3EF7729ED52CB00A11D39 /* NetworkLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkLayer.swift; sourceTree = "<group>"; };
@@ -103,6 +107,7 @@
 		8C0AFDB329ED71340099B594 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				8C2C1B5829EED2910067DDFD /* HeartButton */,
 				8C2A27B829ED9048002E6504 /* MovieCell */,
 			);
 			path = Components;
@@ -210,6 +215,7 @@
 				8CE0EA0829EDCC0A0045FC44 /* Int+CommasHandling.swift */,
 				8C2C1B5029EEB7DC0067DDFD /* Int+PlaceEmojiHandling.swift */,
 				8C2C1B5229EEC1D90067DDFD /* UIViewController+Alert.swift */,
+				8C2C1B5B29EED3F60067DDFD /* UIButton+UIBarButtonItem.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -244,6 +250,14 @@
 				8C2C1B4A29EE214B0067DDFD /* MovieDetailedViewController.swift */,
 			);
 			path = MovieDetailed;
+			sourceTree = "<group>";
+		};
+		8C2C1B5829EED2910067DDFD /* HeartButton */ = {
+			isa = PBXGroup;
+			children = (
+				8C2C1B5929EED2980067DDFD /* HeartButton.swift */,
+			);
+			path = HeartButton;
 			sourceTree = "<group>";
 		};
 		8CB3EF7429ED52B500A11D39 /* NetworkLayer */ = {
@@ -409,6 +423,8 @@
 				8C34B1A629ED86B700753B8C /* MovieCollectionViewCell.swift in Sources */,
 				8CE0EA0929EDCC0A0045FC44 /* Int+CommasHandling.swift in Sources */,
 				8C0AFDAA29ED57260099B594 /* Constants.swift in Sources */,
+				8C2C1B5C29EED3F70067DDFD /* UIButton+UIBarButtonItem.swift in Sources */,
+				8C2C1B5A29EED2980067DDFD /* HeartButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
