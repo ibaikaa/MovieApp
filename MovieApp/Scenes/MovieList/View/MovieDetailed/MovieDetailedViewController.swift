@@ -9,10 +9,12 @@ import UIKit
 import Cosmos
 import SnapKit
 import Kingfisher
+import SafariServices
 
 final class MovieDetailedViewController: UIViewController {
     // MARK: - Свойства
     public var viewModel: MovieDetailedViewModel? {
+        // Установка значений для UI-элементов после того, как viewModel инициализировалась.
         didSet {
             guard let viewModel = viewModel else { return }
             rankLabel.text = "Rating: \(viewModel.getRank())"
@@ -93,8 +95,10 @@ final class MovieDetailedViewController: UIViewController {
     }()
     
     private lazy var watchTrailerButton: UIButton = {
-        let watchTrailerAction = UIAction { action in
-            print("Watch trailer")
+        let watchTrailerAction = UIAction { [unowned self] action in
+            self.viewModel?.getTrailerURLString(completion: { urlString in
+                self.playVideo(urlString: urlString)
+            })
         }
         
         let button = UIButton(primaryAction: watchTrailerAction)
@@ -108,6 +112,23 @@ final class MovieDetailedViewController: UIViewController {
     }()
     
     // MARK: - Методы
+    
+    /// Метод для инициализации свойств viewModel.
+    private func initViewModel() {
+        viewModel?.showAlert = { [weak self] error in
+            self?.showInfoAlert(title: "Error", message: error)
+        }
+    }
+    
+    /// Метод `playVideo(urlString: String)`, принимающий строку URL, и если ее можно перевести в URL, через SafariServices открывает окно Safari по ссылки на трейлер.
+    private func playVideo(urlString: String) {
+        if let url = URL(string: urlString) {
+            let safariVC = SFSafariViewController(url: url)
+            present(safariVC, animated: true)
+        }
+    }
+    
+    /// Метод для расстановки ограничений (constraints) для элементов и также задаем фон экрану.
     private func updateUI() {
         view.backgroundColor = .movieViewBackgroundColor
 
@@ -163,6 +184,7 @@ final class MovieDetailedViewController: UIViewController {
         }
     }
     
+    ///  Метод для конфигурации навигационной панели сверху.
     private func configureNavigationBar() {
         title = "Detail Movie"
         navigationController?.navigationBar.topItem?.backButtonTitle = ""
@@ -185,6 +207,7 @@ final class MovieDetailedViewController: UIViewController {
     // MARK: - ViewController Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        initViewModel()
         updateUI()
         configureNavigationBar()
     }

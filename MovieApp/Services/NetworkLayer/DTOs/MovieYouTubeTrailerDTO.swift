@@ -13,7 +13,8 @@ struct MovieWithTrailer: Codable {
     let videoURL: String
     
     enum CodingKeys: String, CodingKey {
-        case id, fullTitle
+        case id = "imDbId"
+        case fullTitle
         case videoID = "videoId"
         case videoURL = "videoUrl"
     }

@@ -7,14 +7,23 @@
 
 import UIKit
 import Kingfisher
+import RxSwift
 
 final class MovieDetailedViewModel {
-    public var movie: Item
+    // MARK: - Приватные свойства
+    private let networkLayer = NetworkLayer.shared
+    private let disposeBag = DisposeBag()
+    private var movie: Item
     
+    // MARK: - Публичные свойства
+    public var showAlert: ((String) -> Void)?
+
+    // MARK: - Инициализатор
     init(movie: Item) {
         self.movie = movie
     }
     
+    // MARK: - Публичные методы
     public func getRank() -> String {
         guard let rank = movie.rank, let rankValue = Int(rank) else {
             return "No Data"
@@ -55,5 +64,19 @@ final class MovieDetailedViewModel {
     }
     
     public func getCrew() -> String { movie.crew ?? "No Data" }
+    
+    public func getTrailerURLString(
+        completion: @escaping (String) -> Void
+    ) {
+        networkLayer.getMovieWithTrailer(id: movie.id)
+            .map { $0.videoURL }
+            .subscribe(onNext: { videoURL in
+                print(videoURL) // https://www.youtube.com/watch?v=K_tLp7T6U1c
+                completion(videoURL)
+            }, onError: { [weak self] error in
+                self?.showAlert?(error.localizedDescription)
+            })
+            .disposed(by: disposeBag)
+    }
     
 }
