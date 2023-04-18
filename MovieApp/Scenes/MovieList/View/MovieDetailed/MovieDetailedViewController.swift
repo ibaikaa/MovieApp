@@ -80,14 +80,14 @@ final class MovieDetailedViewController: UIViewController {
     private lazy var ratingCountLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        label.textColor = .systemGray4
+        label.textColor = .white
         return label
     }()
     
     private lazy var crewLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "AvenirNext-Italic", size: 16)
-        label.textColor = .systemGray4
+        label.textColor = .white
         label.numberOfLines = 0
         return label
     }()

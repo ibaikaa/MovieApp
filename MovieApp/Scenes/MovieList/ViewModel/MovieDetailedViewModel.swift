@@ -15,7 +15,17 @@ final class MovieDetailedViewModel {
         self.movie = movie
     }
     
-    public func getRank() -> String { movie.rank ?? "No Rank Data" }
+    public func getRank() -> String {
+        guard let rank = movie.rank, let rankValue = Int(rank) else {
+            return "No Data"
+        }
+        
+        if (1...3).contains(rankValue) {
+            return "\(rank) \(rankValue.getRankEmoji())"
+        } else {
+            return rank
+        }
+    }
     
     public func setPosterImage(for imageView: UIImageView) {
         imageView.kf.setImage(

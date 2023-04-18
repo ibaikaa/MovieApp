@@ -42,6 +42,3 @@ final class MovieListViewModel {
     
 }
 
-enum MovieListError: Error {
-    case indexOutOfRange
-}

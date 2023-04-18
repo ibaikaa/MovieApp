@@ -151,16 +151,6 @@ final class MovieCollectionViewCell: UICollectionViewCell {
         return firstPersonName + " " + firstPersonLastName
     }
     
-    /// Метод, который возвращает смайлик в зависимости от значения параметра place. Используется для первых трех по рангу фильмов.
-    private func getRankEmoji(for place: Int) -> String {
-        switch place {
-        case 1: return "🥇"
-        case 2: return "🥈"
-        case 3: return "🥉"
-        default: return ""
-        }
-    }
-    
     /**
      Метод для задания значений для элементов с приходящего параметра `movie` типа` Item`.
      */
@@ -178,7 +168,7 @@ final class MovieCollectionViewCell: UICollectionViewCell {
         
         /// Попытка получения значения rank типа Int через опциональное связывание и проверка, занимает ли оно 1-3 место.
         if let rank = movie.rank, let rankValue = Int(rank), (1...3).contains(rankValue) {
-            rankEmojiLabel.text = getRankEmoji(for: rankValue)
+            rankEmojiLabel.text = rankValue.getRankEmoji()
             rankEmojiLabel.isHidden = false
         } else {
             rankEmojiLabel.isHidden = true
