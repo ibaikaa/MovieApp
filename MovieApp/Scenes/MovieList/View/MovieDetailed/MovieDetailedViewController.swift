@@ -11,9 +11,8 @@ import SnapKit
 import Kingfisher
 import SafariServices
 
-
 final class MovieDetailedViewController: UIViewController {
-    // MARK: - Свойства
+    // MARK: - ViewModel
     public var viewModel: MovieDetailedViewModel? {
         // Установка значений для UI-элементов после того, как viewModel инициализировалась.
         didSet {
@@ -27,6 +26,8 @@ final class MovieDetailedViewController: UIViewController {
             crewLabel.text = "Crew: \(viewModel.getCrew())"
         }
     }
+    
+    // MARK: - UI-элементы.
     
     private lazy var rankLabel: UILabel = {
         let label = UILabel()
@@ -204,9 +205,12 @@ final class MovieDetailedViewController: UIViewController {
     @objc
     private func didTapAddToFavoritesButton() {
         heartButton.flipLikedState()
-        
+        viewModel?.didTapAddToFavoritesButton()
+    }
+    
+    private func configureAddToFavoritesButton() {
         guard let viewModel = viewModel else { return }
-        viewModel.isFavorite() ? viewModel.removeMovieFromFavorites() : viewModel.addFavoriteMovie()
+        heartButton.isLiked = viewModel.isFavoriteMovie
     }
     
     // MARK: - ViewController Life Cycle
@@ -219,9 +223,7 @@ final class MovieDetailedViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        guard let viewModel = viewModel else { return }
-        heartButton.isLiked = viewModel.isFavorite()
+        configureAddToFavoritesButton()
     }
     
 }

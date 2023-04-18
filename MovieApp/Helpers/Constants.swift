@@ -21,5 +21,17 @@ struct Constants {
     
     /// Метод возвращает API ключ для доступа к IMDb API.
     public func getApiKey() -> String { API_KEY }
+    
+    // MARK: - for CoreData
+    enum EntityAttributeKeys: String {
+        case id = "id"
+        case title = "title"
+        case year = "year"
+        case rank = "rank"
+        case rating = "rating"
+        case ratingCount = "ratingCount"
+        case crew = "crew"
+    }
+    
 }
 

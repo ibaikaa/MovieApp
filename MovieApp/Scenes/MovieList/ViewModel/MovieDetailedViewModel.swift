@@ -22,9 +22,13 @@ final class MovieDetailedViewModel {
     // MARK: - Инициализатор
     init(movie: Item) {
         self.movie = movie
+        fetchFavoriteMovies()
     }
     
     // MARK: - Публичные методы
+    
+    // MARK: - Методы для получения данных в UI-элементы.
+    
     public func getRank() -> String {
         guard let rank = movie.rank, let rankValue = Int(rank) else {
             return "No Data"
@@ -80,48 +84,61 @@ final class MovieDetailedViewModel {
             .disposed(by: disposeBag)
     }
     
-    // MARK: - Сохранение данных в CoreDataManager
-    private var favoriteMovies: [FavoriteMovie] = []
+    // MARK: - Работы с данными CoreDataManager
     
-    
-    public func isFavorite() -> Bool {
-        var isFavorite = true
+    /// Метод для стягивания всех избранных фильмов. Нужен для того, чтоб получить текущий фильм в виде класса `FavoriteMovie`
+    private func fetchFavoriteMovies() {
         coreDataManager.fetchFavoriteMovies { [unowned self] result in
             switch result {
             case .success(let movies):
-                self.favoriteMovies = movies
-                isFavorite = movies.map { $0.title == movie.title }.contains(true)
+                movieAsFavorite = movies.first(where: { $0.id == movie.id })
             case .failure(let error):
                 self.showAlert?(error.localizedDescription)
-                isFavorite = false
             }
         }
-        print("Избранное: \(isFavorite)")
-        return isFavorite
     }
     
+    /// Свойство, используемое для определения, фильм в избранном или нет.
+    public var isFavoriteMovie: Bool = false
     
-    public func addFavoriteMovie() {
-        let title = movie.title ?? "No Data"
-        print("Добавить movie: \(title)")
-        coreDataManager.saveFavoriteMovie(title: title) { [unowned self] error in
+    /// Свойство, необходимое для работы с CoreData (удаление/добавление)
+    private var movieAsFavorite: FavoriteMovie? {
+        didSet {
+            // В избранных ли фильм определяется так: существует ли фильм в избранных.
+            isFavoriteMovie = movieAsFavorite != nil
+        }
+    }
+    
+    /// Метод для добавления фильма в CoreData.
+    private func addFavoriteMovie() {
+        coreDataManager.saveFavoriteMovie(
+            id: movie.id,
+            title: movie.title ?? "No Data",
+            year: movie.year ?? "No Data",
+            rank: movie.rank ?? "No Data",
+            rating: movie.rating ?? "No Data",
+            ratingCount: movie.ratingCount ?? "No Data",
+            crew: movie.crew ?? "No Data"
+        ) { [unowned self] error in
             if let error = error {
                 self.showAlert?(error.localizedDescription)
             }
         }
     }
     
-    public func removeMovieFromFavorites() {
-        guard let movieToDelete = favoriteMovies.first(where: { $0.title == movie.title } ) else {
-            return
-        }
-        
-        print("Удалить movie: \(movieToDelete.title)")
+    /// Метод для удаления фильма из CoreData.
+    private func removeMovieFromFavorites() {
+        guard let movieToDelete = movieAsFavorite else { return }
         coreDataManager.removeMovieFromFavorites(movieToDelete){ [unowned self] error in
             if let error = error {
                 self.showAlert?(error.localizedDescription)
             }
         }
+    }
+    
+    /// Метод, вызывающийся при нажатии на кнопку.
+    public func didTapAddToFavoritesButton() {
+        isFavoriteMovie ? removeMovieFromFavorites() : addFavoriteMovie()
     }
     
 }

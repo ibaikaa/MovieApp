@@ -9,22 +9,33 @@ import CoreData
 import UIKit
 
 final class CoreDataManager {
+    // MARK: - Singleton
     static let shared = CoreDataManager()
+    private init() { }
     
-    var persistentContainer: NSPersistentContainer = {
+    // MARK: - Приватные свойства
+    
+    /// Получение persistentContainer'а из AppDelegate.
+    private var persistentContainer: NSPersistentContainer = {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             fatalError("Unable to retrieve App Delegate")
         }
         
         let container = appDelegate.persistentContainer
-        
         return container
     }()
     
-    private init() { }
+    // MARK: - Публичные методы
     
-    func saveFavoriteMovie(
+    /// Метод сохранения данных в CoreData
+    public func saveFavoriteMovie(
+        id: String,
         title: String,
+        year: String,
+        rank: String,
+        rating: String,
+        ratingCount: String,
+        crew: String,
         completion: @escaping ( (Error?) -> Void)
     ) {
         let managedContext = persistentContainer.viewContext
@@ -38,18 +49,53 @@ final class CoreDataManager {
         }
         
         let favoriteMovie = FavoriteMovie(entity: entity, insertInto: managedContext)
-        favoriteMovie.setValue(title, forKey: "title")
+        
+        favoriteMovie.setValue(
+            id,
+            forKey: Constants.EntityAttributeKeys.id.rawValue
+        )
+        
+        favoriteMovie.setValue(
+            title,
+            forKey: Constants.EntityAttributeKeys.title.rawValue
+        )
+        
+        favoriteMovie.setValue(
+            year,
+            forKey: Constants.EntityAttributeKeys.year.rawValue
+        )
+        
+        favoriteMovie.setValue(
+            rank,
+            forKey: Constants.EntityAttributeKeys.rank.rawValue
+        )
+        
+        favoriteMovie.setValue(
+            rating,
+            forKey: Constants.EntityAttributeKeys.rating.rawValue
+        )
+        
+        favoriteMovie.setValue(
+            ratingCount,
+            forKey: Constants.EntityAttributeKeys.ratingCount.rawValue
+        )
+        
+        favoriteMovie.setValue(
+            crew,
+            forKey: Constants.EntityAttributeKeys.crew.rawValue
+        )
         
         do {
             try managedContext.save()
             completion(nil)
-            print("Успешно сохранено! \(title)")
         } catch {
             completion(error)
         }
+        
     }
     
-    func fetchFavoriteMovies(
+    /// Метод для стягивания данных с CoreData
+    public func fetchFavoriteMovies(
         completion: @escaping ( (Result<[FavoriteMovie], Error>) -> Void)
     ) {
         let managedContext = persistentContainer.viewContext
@@ -57,12 +103,13 @@ final class CoreDataManager {
         do {
             let favoriteMovies = try managedContext.fetch(fetchData)
             completion(.success(favoriteMovies))
-            print("Успешно стянул данные.")
         } catch {
             completion(.failure(error))
         }
     }
     
+    
+    /// Метод для удаления объекта из CoreData.
     func removeMovieFromFavorites(
         _ movieToDelete: FavoriteMovie,
         completion: @escaping ( (Error?) -> Void)
@@ -73,12 +120,11 @@ final class CoreDataManager {
         do {
             try managedContext.save()
             completion(nil)
-            print("Успешно удалено! \(movieToDelete.title)")
         } catch {
             completion(error)
         }
     }
-        
+    
 }
 
 
