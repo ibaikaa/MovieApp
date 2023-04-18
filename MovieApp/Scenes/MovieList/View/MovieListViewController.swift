@@ -49,15 +49,20 @@ final class MovieListViewController: UIViewController {
             }
             .disposed(by: disposeBag)
         
-        /// Отлавливание нажатия на ячейку через rx
+        /// Отлавливание нажатия на ячейку через `rx`
         moviesCollectionView.rx
-            .itemSelected
-            .bind { ip in
-                print(ip.row)
+            .modelSelected(Item.self)
+            .subscribe { movie in
+                let vc = MovieDetailedViewController()
+                vc.viewModel = MovieDetailedViewModel(movie: movie)
+                self.navigationController?.pushViewController(vc, animated: true)
+            } onError: { error in
+                print(error.localizedDescription)
             }
             .disposed(by: disposeBag)
         
-        /// Установка delegate через rx
+        
+        /// Установка `delegate` через `rx`
         moviesCollectionView.rx
             .setDelegate(self)
             .disposed(by: disposeBag)
@@ -79,7 +84,7 @@ final class MovieListViewController: UIViewController {
         moviesSearchController.searchBar.barStyle = .black // Стиль searchBar'a
         
         moviesSearchController.searchBar.searchTextField.placeholder = "Search movie by name" // Placeholder
-
+        
         /// Установка `searchController'а` для `navigationItem`
         navigationItem.searchController = moviesSearchController
         

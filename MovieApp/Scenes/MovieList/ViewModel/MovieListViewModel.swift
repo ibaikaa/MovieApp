@@ -20,12 +20,18 @@ final class MovieListViewModel {
     
     private let disposeBag = DisposeBag()
     
-    func getMovies() {
+    // MARK: - Методы
+    
+    /**
+     Метод получения списка фильмов.
+     */
+    public func getMovies() {
         networkLayer.getMovieList()
             .subscribe(
                 onNext: { movieGroup in
                     if let movies = movieGroup.items {
                         self.moviesSubject.onNext(movies)
+                        print("Emmited movies: \(movies.count)")
                     }
                 },
                 onError: { error in
@@ -35,5 +41,8 @@ final class MovieListViewModel {
             .disposed(by: disposeBag)
     }
     
-    
+}
+
+enum MovieListError: Error {
+    case indexOutOfRange
 }

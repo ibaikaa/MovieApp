@@ -7,12 +7,12 @@
 
 import Foundation
 
-/// Структура MovieGroup, содержащая в себе массив из фильмов (название endpoint'а для фильма – item)
+/// Структура `MovieGroup`, содержащая в себе массив из фильмов (название endpoint'а для фильма – `item`)
 struct MovieGroup: Decodable {
     let items: [Item]?
 }
 
-/// Структура Item, содержащая в себе всю возможную информацию о фильме.
+/// Структура `Item`, содержащая в себе всю возможную информацию о фильме.
 struct Item: Decodable {
     let rank: String?
     let title: String?
@@ -23,12 +23,12 @@ struct Item: Decodable {
     let rating: String?
     let ratingCount: String?
     
-    /// CodingKeys для лучшей читабельности кода и названий свойств.
-    /// Использовано для того, чтоб поменять imDbRating ии ImDbRatingCount на rating и ratingCount соотвественно.
+    /// `CodingKeys` для лучшей читабельности кода и названий свойств.
+    /// Использовано для того, чтоб поменять `imDbRating` и `ImDbRatingCount` на `rating` и `ratingCount` соотвественно. Также для изменения `image` на `posterPath`.
     enum CodingKeys: String, CodingKey {
         case rank, title, fullTitle, year
         case posterPath = "image"
-        case crew = "crew"
+        case crew
         case rating = "imDbRating"
         case ratingCount = "imDbRatingCount"
     }
