@@ -14,6 +14,8 @@ final class MovieListViewController: UIViewController {
     private let viewModel = MovieListViewModel()
     private let disposeBag = DisposeBag()
 
+    // MARK: - UI-элементы
+    
     // MARK: - UISearchController
     private let moviesSearchController = UISearchController(searchResultsController: nil)
     
@@ -80,8 +82,6 @@ final class MovieListViewController: UIViewController {
         setCollectionViewDelegate()
     }
     
-    // MARK: - UI-элементы
-    
     // MARK: - loadingView: UIActivityIndicatorView
     private var loadingView: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView(style: .large)
@@ -121,6 +121,7 @@ final class MovieListViewController: UIViewController {
     }
 
     // MARK: - setupSubviews()
+    
     /// Метод для установки констрейнтов для элементов.
     private func setupSubviews() {
         view.addSubview(moviesCollectionView)
@@ -141,7 +142,6 @@ final class MovieListViewController: UIViewController {
             make.center.equalToSuperview()
         }
     }
-
     
     // MARK: - ViewModel
     
