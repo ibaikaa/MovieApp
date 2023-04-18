@@ -64,7 +64,7 @@ final class MainTabBarController: UITabBarController {
     private func generateTabBar() {
         viewControllers = [
             generateVC(
-                viewController: HomeViewController(),
+                viewController: MovieListViewController(),
                 title: "Main",
                 image: UIImage(systemName: "house"),
                 selectedImage: UIImage(systemName: "house.fill")

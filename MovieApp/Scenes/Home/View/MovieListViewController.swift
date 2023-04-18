@@ -1,5 +1,5 @@
 //
-//  HomeViewController.swift
+//  MovieListViewController.swift
 //  MovieApp
 //
 //  Created by ibaikaa on 17/4/23.
@@ -10,17 +10,10 @@ import SnapKit
 import RxCocoa
 import RxSwift
 
-class HomeViewController: UIViewController {
-    
-    private let viewModel = HomeViewModel()
+final class MovieListViewController: UIViewController {
+    // MARK: - Приватные свойства
+    private let viewModel = MovieListViewModel()
     private let disposeBag = DisposeBag()
-    
-    private lazy var moviesTableView: UITableView = {
-        let tableView = UITableView()
-        tableView.separatorColor = .clear
-        tableView.backgroundColor = .clear
-        return tableView
-    }()
     
     private lazy var moviesCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -33,22 +26,30 @@ class HomeViewController: UIViewController {
         return collectionView
     }()
     
+    // UISearchController
+    private let moviesSearchController = UISearchController(searchResultsController: nil)
+    
+    // MARK: - Приватные методы
     private func configureMoviesCollectionView() {
+        // Регистрация кастомной ячейки
         moviesCollectionView.register(
             MovieCollectionViewCell.self,
             forCellWithReuseIdentifier: MovieCollectionViewCell.identifier
         )
         
+        /// Связывание данных для `moviesCollectionView` от `viewModel`
         viewModel.moviesObservable
-            .bind(to: moviesCollectionView.rx.items(cellIdentifier: MovieCollectionViewCell.identifier)
-            ) { index, movie, cell in
+            .bind(to: moviesCollectionView.rx.items(
+                cellIdentifier: MovieCollectionViewCell.identifier
+            )) { index, movie, cell in
                 guard let cell = cell as? MovieCollectionViewCell else {
-                    fatalError()
+                    return
                 }
-                cell.setup(with: movie)
+                cell.configure(with: movie)
             }
             .disposed(by: disposeBag)
         
+        /// Отлавливание нажатия на ячейку через rx
         moviesCollectionView.rx
             .itemSelected
             .bind { ip in
@@ -56,12 +57,13 @@ class HomeViewController: UIViewController {
             }
             .disposed(by: disposeBag)
         
+        /// Установка delegate через rx
         moviesCollectionView.rx
             .setDelegate(self)
             .disposed(by: disposeBag)
-        
     }
     
+    /// Метод для установки констрейнтов.
     private func updateUI() {
         view.addSubview(moviesCollectionView)
         moviesCollectionView.snp.makeConstraints { make in
@@ -72,20 +74,25 @@ class HomeViewController: UIViewController {
         }
     }
     
-    private let searchController = UISearchController(searchResultsController: nil)
-    
+    /// Метод для настройки `moviesSearchController'а`.
     private func configureSearchController() {
-        searchController.searchBar.barStyle = .black
-        navigationItem.searchController = searchController
+        moviesSearchController.searchBar.barStyle = .black // Стиль searchBar'a
+        
+        moviesSearchController.searchBar.searchTextField.placeholder = "Search movie by name" // Placeholder
+
+        /// Установка `searchController'а` для `navigationItem`
+        navigationItem.searchController = moviesSearchController
+        
+        // Установка, чтоб при скролле было видно и title и поисковик.
         navigationItem.searchController?.hidesNavigationBarDuringPresentation = false
         navigationItem.hidesSearchBarWhenScrolling = false
         
-        searchController.searchBar.searchTextField.placeholder = "Search movie by name"
     }
     
+    // MARK: - ViewController Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel.fetchMovies()
+        viewModel.getMovies()
         configureSearchController()
         configureMoviesCollectionView()
         updateUI()
@@ -93,7 +100,8 @@ class HomeViewController: UIViewController {
     
 }
 
-extension HomeViewController: UICollectionViewDelegateFlowLayout {
+// MARK: - UICollectionViewDelegateFlowLayout extension
+extension MovieListViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
@@ -104,4 +112,5 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
             height: view.bounds.height / 4.2
         )
     }
+    
 }

@@ -9,17 +9,19 @@ import UIKit
 import SnapKit
 import Kingfisher
 import Cosmos
-import RxSwift
 
 final class MovieCollectionViewCell: UICollectionViewCell {
+    /// Идентификатор ячейки
     static let identifier = String(describing: MovieCollectionViewCell.self)
-    
+  
+    // MARK: - UI-элементы.
     private lazy var posterImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.backgroundColor = .clear
         imageView.layer.cornerRadius = 12
         imageView.clipsToBounds = true
+        imageView.tintColor = .systemYellow
         return imageView
     }()
     
@@ -30,7 +32,7 @@ final class MovieCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    private lazy var movieNameLabel: UILabel = {
+    private lazy var movieInfoLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "AvenirNext-Bold", size: 18)
         label.textColor = .white
@@ -62,7 +64,7 @@ final class MovieCollectionViewCell: UICollectionViewCell {
         return cosmosView
     }()
     
-    private lazy var crewLabel: UILabel = {
+    private lazy var directorNameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "AvenirNext-Regular", size: 14)
         label.numberOfLines = 2
@@ -70,20 +72,14 @@ final class MovieCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    private lazy var rankIconLabel: UILabel = {
+    private lazy var rankEmojiLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 30)
         label.isHidden = true
         return label
     }()
-    
-    private lazy var saveDataButton: UIButton = {
-        let button = UIButton()
-        button.tintColor = .white
-        button.setImage(UIImage(systemName: "bookmark"), for: .normal)
-        return button
-    }()
-    
+
+    // MARK: - setupSubviews(). Метод для установки ограничений (constraints) с использованием инструмента Snapkit.
     private func setupSubviews() {
         addSubview(backgroundViewContainer)
         backgroundViewContainer.snp.makeConstraints { make in
@@ -99,8 +95,8 @@ final class MovieCollectionViewCell: UICollectionViewCell {
             make.width.equalTo(bounds.width / 3)
         }
         
-        addSubview(movieNameLabel)
-        movieNameLabel.snp.makeConstraints { make in
+        addSubview(movieInfoLabel)
+        movieInfoLabel.snp.makeConstraints { make in
             make.top.equalTo(backgroundViewContainer.snp.top).offset(20)
             make.left.equalTo(posterImageView.snp.right).offset(20)
             make.right.equalTo(backgroundViewContainer.snp.right).offset(-30)
@@ -108,35 +104,55 @@ final class MovieCollectionViewCell: UICollectionViewCell {
         
         addSubview(ratingStarsView)
         ratingStarsView.snp.makeConstraints { make in
-            make.top.equalTo(movieNameLabel.snp.bottom).offset(10)
+            make.top.equalTo(movieInfoLabel.snp.bottom).offset(10)
             make.left.equalTo(posterImageView.snp.right).offset(20)
             make.right.equalTo(backgroundViewContainer.snp.right).offset(-10)
         }
         
-        addSubview(crewLabel)
-        crewLabel.snp.makeConstraints { make in
+        addSubview(directorNameLabel)
+        directorNameLabel.snp.makeConstraints { make in
             make.top.equalTo(ratingStarsView.snp.bottom).offset(20)
             make.left.equalTo(posterImageView.snp.right).offset(20)
             make.right.equalTo(backgroundViewContainer.snp.right).offset(-30)
         }
         
-        addSubview(rankIconLabel)
-        rankIconLabel.snp.makeConstraints { make in
-            make.top.equalTo(backgroundViewContainer.snp.top).offset(-10)
-            make.right.equalTo(backgroundViewContainer.snp.right).offset(-10)
+        addSubview(rankEmojiLabel)
+        rankEmojiLabel.snp.makeConstraints { make in
+            make.top.equalTo(backgroundViewContainer.snp.top).offset(-5)
+            make.right.equalTo(backgroundViewContainer.snp.right).offset(-3)
         }
+    }
         
-        
-        addSubview(saveDataButton)
-        saveDataButton.snp.makeConstraints { make in
-            make.right.equalTo(backgroundViewContainer.snp.right).offset(-10)
-            make.bottom.equalTo(backgroundViewContainer.snp.bottom).offset(-10)
-            make.width.height.equalTo(30)
-        }
-        
+    // MARK: - layoutSubviews().
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        setupSubviews()
     }
     
-    private func setRankIconForTopThreeMovies(place: Int) -> String {
+    // MARK: - For configuring data for cell.
+        
+    /**
+     Данные (эндпоинт `crew` приходят в виде: "Имя Фамилия (дир.), Актер 1, Актер 2"
+     Необходимо получить имя и фамилию режиссера.
+     Данный метод решает данную задачу,
+     – Возвращает: строку с именем и фамилией режиссера.
+     */
+    
+    private func getDirector(crew: String) -> String {
+        // Проверка, не пустая ли строка.
+        guard !crew.isEmpty else { return "No Data" }
+        // Получение имени и фамилии режисера.
+        let firstPerson = crew.components(separatedBy: ",")[0]
+        // Получение имени
+        let firstPersonName = firstPerson.components(separatedBy: " ")[0]
+        // Получение фамилии
+        let firstPersonLastName = firstPerson.components(separatedBy: " ")[1]
+        // Через конкатенацию возвращаем с пробелом имя и фамилию
+        return firstPersonName + " " + firstPersonLastName
+    }
+    
+    /// Метод, который возвращает смайлик в зависимости от значения параметра place. Используется для первых трех по рангу фильмов.
+    private func getRankEmoji(for place: Int) -> String {
         switch place {
         case 1: return "🥇"
         case 2: return "🥈"
@@ -145,43 +161,40 @@ final class MovieCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    private func getDirector(crew: String) -> String {
-        guard !crew.isEmpty else { return "No Data" }
-        let firstPerson = crew.components(separatedBy: ",")[0]
-        print(firstPerson)
-        let firstPersonName = firstPerson.components(separatedBy: " ")[0]
-        let firstPersonLastName = firstPerson.components(separatedBy: " ")[1]
-        return firstPersonName + " " + firstPersonLastName
-    }
-    
-    public func setup(with model: Item) {
-        posterImageView.kf.setImage(with: URL(string: model.image ?? "" ))
-        movieNameLabel.text = "\(model.title ?? "Movie Name") (\(model.year ?? "0000"))"
-        crewLabel.text = "Director: \(getDirector(crew: model.crew ?? ""))"
+    /**
+     Метод для задания значений для элементов с приходящего параметра `movie` типа` Item`.
+     */
+    public func configure(with movie: Item) {
+        /// Использую `kf` для удобной установки изображения по URL.
+        posterImageView.kf
+            .setImage(
+                with: URL(string: movie.posterPath ?? "" ),
+                placeholder: UIImage(systemName: "popcorn.circle.fill")
+            )
         
-        if let rank = model.rank, let rankInt = Int(rank), Array(1...3).contains(rankInt) {
-            rankIconLabel.text = setRankIconForTopThreeMovies(place: rankInt)
-            rankIconLabel.isHidden = false
+        // Установка значений для лейблов через интерполяцию. Вскрываю опциональные значения через коализию.
+        movieInfoLabel.text = "\(movie.title ?? "Movie Name") (\(movie.year ?? "0000"))"
+        directorNameLabel.text = "Director: \(getDirector(crew: movie.crew ?? ""))"
+        
+        /// Попытка получения значения rank типа Int через опциональное связывание и проверка, занимает ли оно 1-3 место.
+        if let rank = movie.rank, let rankValue = Int(rank), (1...3).contains(rankValue) {
+            rankEmojiLabel.text = getRankEmoji(for: rankValue)
+            rankEmojiLabel.isHidden = false
+        } else {
+            rankEmojiLabel.isHidden = true
         }
         
         guard
-            let rating = model.rating,
-            let rating = Double(rating)
+            let rating = movie.rating,
+            let ratingValue = Double(rating)
         else {
-            ratingStarsView.rating = 5
+            ratingStarsView.rating = 0
             ratingStarsView.text = "No Data"
             return
         }
         
-        ratingStarsView.rating = rating / 2
-        ratingStarsView.text = model.rating
-    }
-    
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        setupSubviews()
-   
+        ratingStarsView.rating = ratingValue / 2
+        ratingStarsView.text = movie.rating
     }
     
 }

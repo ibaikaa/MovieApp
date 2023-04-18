@@ -18,7 +18,7 @@ struct Item: Decodable {
     let title: String?
     let fullTitle: String?
     let year: String?
-    let image: String?
+    let posterPath: String?
     let crew: String?
     let rating: String?
     let ratingCount: String?
@@ -26,7 +26,9 @@ struct Item: Decodable {
     /// CodingKeys для лучшей читабельности кода и названий свойств.
     /// Использовано для того, чтоб поменять imDbRating ии ImDbRatingCount на rating и ratingCount соотвественно.
     enum CodingKeys: String, CodingKey {
-        case rank, title, fullTitle, year, image, crew
+        case rank, title, fullTitle, year
+        case posterPath = "image"
+        case crew = "crew"
         case rating = "imDbRating"
         case ratingCount = "imDbRatingCount"
     }
