@@ -21,10 +21,7 @@ enum ApiType: ApiTypeProtocol {
     /// Запрос для получения списка из ТОП 250 фильмов от IMDb.
     case getMovies
     
-    /// Запрос для получения фильма по имени в IMDb.
-    /// - Параметр name: Имя фильма, которое нужно найти.
-    case searchByMovieName(name: String)
-    
+    /// Запрос для получения фильма по ID с ссылкой на трейлер
     case youtubeTrailerByID(id: String)
     
     /// HTTP метод, используемый для API запроса.
@@ -32,12 +29,9 @@ enum ApiType: ApiTypeProtocol {
         switch self {
         case .getMovies:
             return .get
-        case .searchByMovieName:
-            return .get
         case .youtubeTrailerByID:
             return .get
         }
-        
     }
     
     /// Определение языка для API запроса, основанное на языке устройства пользователя.
@@ -51,8 +45,6 @@ enum ApiType: ApiTypeProtocol {
         switch self {
         case .getMovies:
             return "API/Top250Movies/\(Constants.sharedInstance.getApiKey())"
-        case .searchByMovieName(let name):
-            return "API/SearchMovie/\(Constants.sharedInstance.getApiKey())/\(name)"
         case .youtubeTrailerByID(let id):
             return "API/YouTubeTrailer/\(Constants.sharedInstance.getApiKey())/\(id)"
         }
