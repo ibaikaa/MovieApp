@@ -266,18 +266,18 @@
 			children = (
 				8C2C1B5929EED2980067DDFD /* HeartButton.swift */,
 				8C2C1B8029EF240F0067DDFD /* MovieCollectionView */,
-				8C2C1B7D29EF17920067DDFD /* MovieDetailedViewController */,
+				8C2C1B7D29EF17920067DDFD /* MovieDetailed */,
 			);
 			path = Common;
 			sourceTree = "<group>";
 		};
-		8C2C1B7D29EF17920067DDFD /* MovieDetailedViewController */ = {
+		8C2C1B7D29EF17920067DDFD /* MovieDetailed */ = {
 			isa = PBXGroup;
 			children = (
 				8C2C1B7E29EF20BA0067DDFD /* View */,
 				8C2C1B7F29EF20C40067DDFD /* ViewModel */,
 			);
-			path = MovieDetailedViewController;
+			path = MovieDetailed;
 			sourceTree = "<group>";
 		};
 		8C2C1B7E29EF20BA0067DDFD /* View */ = {
