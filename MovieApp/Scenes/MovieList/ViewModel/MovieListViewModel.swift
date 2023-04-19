@@ -21,6 +21,18 @@ final class MovieListViewModel {
         return moviesSubject.asObservable()
     }
     
+    public var searchMovieName = ""
+    public var filteredMoviesObservable: Observable<[Item]> {
+        return moviesObservable.map { [weak self] movies in
+            guard let `self` = self else { return [] }
+            if searchMovieName.isEmpty {
+                return movies
+            } else {
+                return movies.filter { ($0.title ?? "").contains(self.searchMovieName) }
+            }
+        }
+    }
+    
     public var errorObservable: Observable<Error> {
         return errorSubject.asObservable()
     } 

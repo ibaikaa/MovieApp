@@ -9,7 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-final class MovieListViewController: UIViewController {
+final class MovieListViewController: UIViewController, UISearchResultsUpdating {
     // MARK: - Свойства
     private let viewModel = MovieListViewModel()
     private let disposeBag = DisposeBag()
@@ -18,13 +18,15 @@ final class MovieListViewController: UIViewController {
     
     // MARK: - UISearchController
     private let moviesSearchController = UISearchController(searchResultsController: nil)
-    
+
     /// Метод для настройки `moviesSearchController'а`.
     private func configureSearchController() {
+        moviesSearchController.searchResultsUpdater = self
+
         // Стиль searchBar'a
         moviesSearchController.searchBar.barStyle = .black
         // Placeholder
-        moviesSearchController.searchBar.searchTextField.placeholder = "Search movie by name"
+        moviesSearchController.searchBar.placeholder = "Search movie by name"
         
         /// Установка `searchController'а` для `navigationItem`
         navigationItem.searchController = moviesSearchController
@@ -34,12 +36,18 @@ final class MovieListViewController: UIViewController {
         navigationItem.hidesSearchBarWhenScrolling = false
     }
     
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let text = searchController.searchBar.text else { return }
+        viewModel.searchMovieName = text
+        viewModel.getMovies()
+    }
+    
     // MARK: - UICollectionView
     private let moviesCollectionView = MoviesCollectionView()
-        
+    
     /// Метод для связывания `moviesCollectionView` с данными с `viewModel`.
     private func bindCollectionView() {
-        viewModel.moviesObservable
+        viewModel.filteredMoviesObservable
             .bind(to: moviesCollectionView.rx.items(
                 cellIdentifier: MovieCollectionViewCell.identifier
             )) { index, movie, cell in
