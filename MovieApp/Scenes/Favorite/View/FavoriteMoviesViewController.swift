@@ -10,7 +10,7 @@ import RxSwift
 import RxCocoa
 import Lottie
 
-final class FavoriteMoviesViewController: UIViewController {
+final class FavoriteMoviesViewController: UIViewController, UISearchResultsUpdating {
     // MARK: - Свойства
     private let viewModel = FavoriteMoviesViewModel()
     private let disposeBag = DisposeBag()
@@ -22,6 +22,7 @@ final class FavoriteMoviesViewController: UIViewController {
     
     /// Метод для настройки `favoriteMoviesSearchController'а`.
     private func configureSearchController() {
+        favoriteMoviesSearchController.searchResultsUpdater = self
         // Стиль searchBar'a
         favoriteMoviesSearchController.searchBar.barStyle = .black
         // Placeholder
@@ -35,12 +36,17 @@ final class FavoriteMoviesViewController: UIViewController {
         navigationItem.hidesSearchBarWhenScrolling = false
     }
     
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let text = searchController.searchBar.text else { return }
+        viewModel.searchMovieName = text
+    }
+    
     // MARK: - UICollectionView
     private let favoriteMoviesCollectionView = MoviesCollectionView()
     
     /// Метод для связывания `favoriteMoviesCollectionView` с данными с `viewModel`.
     private func bindCollectionView() {
-        viewModel.favoriteMoviesObservable
+        viewModel.filteredMoviesObservable
             .bind(to: favoriteMoviesCollectionView.rx.items(
                 cellIdentifier: MovieCollectionViewCell.identifier
             )) { index, favoriteMovie, cell in
