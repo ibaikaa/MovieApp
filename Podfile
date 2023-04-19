@@ -13,11 +13,9 @@ target 'MovieApp' do
   # Rx
   pod 'RxSwift'
   pod 'RxCocoa'
-  pod 'RxDataSources', '~> 4.0'
 
   # Для верстки
   pod 'SnapKit'
-  pod 'PaddingLabel', '1.2'
   pod 'Cosmos'
 
   # Для удобного интерфейса для получения и отображения картинки по URL.

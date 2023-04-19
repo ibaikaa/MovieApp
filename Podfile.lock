@@ -1,17 +1,11 @@
 PODS:
   - Alamofire (5.6.4)
   - Cosmos (23.0.0)
-  - Differentiator (4.0.1)
   - Kingfisher (7.6.2)
   - lottie-ios (4.1.3)
-  - PaddingLabel (1.2)
   - RxCocoa (5.1.3):
     - RxRelay (~> 5)
     - RxSwift (~> 5)
-  - RxDataSources (4.0.1):
-    - Differentiator (~> 4.0)
-    - RxCocoa (~> 5.0)
-    - RxSwift (~> 5.0)
   - RxRelay (5.1.3):
     - RxSwift (~> 5)
   - RxSwift (5.1.3)
@@ -22,9 +16,7 @@ DEPENDENCIES:
   - Cosmos
   - Kingfisher
   - lottie-ios
-  - PaddingLabel (= 1.2)
   - RxCocoa
-  - RxDataSources (~> 4.0)
   - RxSwift
   - SnapKit
 
@@ -32,12 +24,9 @@ SPEC REPOS:
   trunk:
     - Alamofire
     - Cosmos
-    - Differentiator
     - Kingfisher
     - lottie-ios
-    - PaddingLabel
     - RxCocoa
-    - RxDataSources
     - RxRelay
     - RxSwift
     - SnapKit
@@ -45,16 +34,13 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Alamofire: 4e95d97098eacb88856099c4fc79b526a299e48c
   Cosmos: b5c6a9a637e28a061b54c8f8b1d8529d7d4db73f
-  Differentiator: 886080237d9f87f322641dedbc5be257061b0602
   Kingfisher: 6c5449c6450c5239166510ba04afe374a98afc4f
   lottie-ios: d0954d3150061f662ed0adf96ef98d7421864c47
-  PaddingLabel: 21ab5282c780366018b04c30e3920c2f55a2fd14
   RxCocoa: e2ed092d5432e4296aa818021d27de4090ac0354
-  RxDataSources: efee07fa4de48477eca0a4611e6d11e2da9c1114
   RxRelay: 5a18c2eb2d68326ebaf0112f80d837ae41b92b97
   RxSwift: 915abbdfb62214aa89ccd0b194d44fb478019b27
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
 
-PODFILE CHECKSUM: cde4e82efe522bf2f3300c3d25bc9fa9988a0d6d
+PODFILE CHECKSUM: a572b74ccefcfa348d1ef07780cc12b373b4187b
 
 COCOAPODS: 1.12.0
