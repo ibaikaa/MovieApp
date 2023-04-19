@@ -16,7 +16,7 @@ struct Constants {
     public let baseURL: String = "https://imdb-api.com"
     
     /// API ключ для доступа к IMDb API.
-    private let API_KEY = "k_de623q34"
+    private let API_KEY = "k_ekchs9ot"
     
     /// Метод возвращает API ключ для доступа к IMDb API.
     public func getApiKey() -> String { API_KEY }
