@@ -120,13 +120,14 @@ final class MovieDetailedViewModel {
             self?.coreDataManager.fetchFavoriteMovies { result in
                 switch result {
                 case .success(let movies):
-                    self?.movieAsFavorite = movies.first(where: { $0.id == self?.movie.id })
+                    self?.movieAsFavorite = movies.first(where: { $0.id == self?.movie.id }) 
                 case .failure(let error):
                     observer.onError(error)
                 }
                 observer.onNext(self?.isFavoriteMovie ?? false)
                 observer.onCompleted()
             }
+            
             return Disposables.create()
         }
     }

@@ -99,16 +99,22 @@ final class MovieDetailedViewController: UIViewController {
     }()
     
     private lazy var watchTrailerButton: UIButton = {
+        var container = AttributeContainer()
+        container.font = UIFont(name: "AvenirNext-Bold", size: 20)
+        
+        var configuration = UIButton.Configuration.plain()
+        configuration.attributedTitle = AttributedString("Watch trailer", attributes: container)
+        configuration.image = UIImage(systemName: "play.circle.fill")
+        configuration.imagePlacement = .trailing
+        configuration.imagePadding = 10
+        
         let watchTrailerAction = UIAction { [weak self] action in
             self?.viewModel?.getTrailerURLString(completion: { urlString in
                 self?.playVideo(urlString: urlString)
             })
         }
         
-        let button = UIButton(primaryAction: watchTrailerAction)
-        button.setTitle("Watch trailer", for: .normal)
-        button.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 20)
-        button.setImage(UIImage(systemName: "play.circle.fill"), for: .normal)
+        let button = UIButton(configuration: configuration, primaryAction: watchTrailerAction)
         button.backgroundColor = .systemBlue
         button.tintColor = .white
         button.layer.cornerRadius = 10
