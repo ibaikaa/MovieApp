@@ -26,7 +26,7 @@ final class FavoriteMoviesViewController: UIViewController, UISearchResultsUpdat
         // Стиль searchBar'a
         favoriteMoviesSearchController.searchBar.barStyle = .black
         // Placeholder
-        favoriteMoviesSearchController.searchBar.searchTextField.placeholder = "Search movie by name"
+        favoriteMoviesSearchController.searchBar.placeholder = "Search movie by name"
         
         /// Установка `searchController'а` для `navigationItem`
         navigationItem.searchController = favoriteMoviesSearchController
@@ -112,6 +112,8 @@ final class FavoriteMoviesViewController: UIViewController, UISearchResultsUpdat
         label.textAlignment = .center
         return label
     }()
+    
+    // MARK: - setupSubviews()
     
     /// Метод для установки констрейнтов.
     private func setupSubviews() {

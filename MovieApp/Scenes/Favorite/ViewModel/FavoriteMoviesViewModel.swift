@@ -49,7 +49,7 @@ final class FavoriteMoviesViewModel {
                 self.favoriteMoviesSubject.onNext(movies)
             } onError: { error in
                 self.errorSubject.onNext(error)
-            }
+            } 
             .disposed(by: disposeBag)
     }
     
