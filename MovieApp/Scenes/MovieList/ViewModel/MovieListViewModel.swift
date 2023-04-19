@@ -21,10 +21,16 @@ final class MovieListViewModel {
         return moviesSubject.asObservable()
     }
     
-    public var searchMovieName = ""
+    public var searchMovieName = "" {
+        didSet {
+            getMovies()
+        }
+    }
+    
     public var filteredMoviesObservable: Observable<[Item]> {
         return moviesObservable.map { [weak self] movies in
             guard let `self` = self else { return [] }
+            print("movie to find: \(searchMovieName). empty: \(searchMovieName.isEmpty)")
             if searchMovieName.isEmpty {
                 return movies
             } else {
