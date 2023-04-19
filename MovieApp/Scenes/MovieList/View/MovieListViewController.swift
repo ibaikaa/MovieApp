@@ -123,7 +123,7 @@ final class MovieListViewController: UIViewController, UISearchResultsUpdating {
     }()
     
     @objc func retry() {
-        viewModel.getMovies()
+        viewModel.fetchMovies()
         tryAgainButton.isHidden = true
     }
 
@@ -157,17 +157,16 @@ final class MovieListViewController: UIViewController, UISearchResultsUpdating {
         viewModel.isLoading
             .observeOn(MainScheduler.instance)
             .subscribe { [weak self] isLoading in
-                guard let `self` = self else { return }
-                isLoading ? self.showLoadingIndicator() : self.hideLoadingIndicator()
+                isLoading ? self?.showLoadingIndicator() : self?.hideLoadingIndicator()
             }
             .disposed(by: disposeBag)
         
         viewModel.errorObservable
             .observeOn(MainScheduler.instance)
-            .subscribe { error in
+            .subscribe { [weak self] error in
                 if let error = error.element {
-                    self.showInfoAlert(title: "Error", message: error.localizedDescription)
-                    self.tryAgainButton.isHidden = false
+                    self?.showInfoAlert(title: "Error", message: error.localizedDescription)
+                    self?.tryAgainButton.isHidden = false
                 }
             }
             .disposed(by: disposeBag)
@@ -176,8 +175,8 @@ final class MovieListViewController: UIViewController, UISearchResultsUpdating {
     // MARK: - ViewController Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel.fetchMovies()
         initViewModel()
-        viewModel.getMovies()
         configureSearchController()
         configureMoviesCollectionView()
         setupSubviews()

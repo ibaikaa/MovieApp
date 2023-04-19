@@ -23,14 +23,13 @@ final class MovieListViewModel {
     
     public var searchMovieName = "" {
         didSet {
-            getMovies()
+            fetchMovies()
         }
     }
     
     public var filteredMoviesObservable: Observable<[Item]> {
         return moviesObservable.map { [weak self] movies in
             guard let `self` = self else { return [] }
-            print("movie to find: \(searchMovieName). empty: \(searchMovieName.isEmpty)")
             if searchMovieName.isEmpty {
                 return movies
             } else {
@@ -46,8 +45,9 @@ final class MovieListViewModel {
     // MARK: - Методы
     
     /// Метод получения списка фильмов.
-    public func getMovies() {
+    public func fetchMovies() {
         isLoading.onNext(true)
+        
         networkLayer.getMovieList()
             .subscribe(
                 onNext: { [weak self] movieGroup in
